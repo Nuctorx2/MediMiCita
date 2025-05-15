@@ -1,0 +1,31 @@
+com.tuproyecto
+├── config           // SecurityConfig, WebMvcConfig (for i18n), SwaggerConfig
+├── controller       // Controladores MVC y REST (si separas API)
+│   ├── web          // Controladores Thymeleaf (PatientController, DoctorController, AdminController)
+│   └── api          // Controladores REST (si es necesario, para JS asíncrono o futuras apps móviles)
+├── dto              // Data Transfer Objects (para formularios, respuestas API)
+├── entity           // Entidades JPA (User, Appointment, Role, Specialty, etc.)
+├── exception        // Excepciones personalizadas (ResourceNotFoundException)
+├── repository       // Interfaces Spring Data JPA (UserRepository, AppointmentRepository)
+├── service          // Lógica de negocio (UserService, AppointmentService, EmailService)
+│   └── impl         // Implementaciones de los servicios
+├── security         // Clases relacionadas con JWT (JwtTokenProvider, JwtAuthFilter) y UserDetails
+└── util             // Clases de utilidad
+
+Swagger:
+ Anotaciones en tus Controladores (Clave para la Documentación):
+Para que Swagger genere una documentación útil, necesitas anotar tus controladores REST (si los tienes). Si tu aplicación es principalmente Thymeleaf, es posible que no tengas muchos controladores REST expuestos públicamente, pero si tienes alguno (quizás para alguna funcionalidad AJAX o para futuras APIs), aquí es donde se documentan.
+@RestController: Marca la clase como un controlador REST.
+@Tag: Para agrupar operaciones.
+@Tag(name = "Nombre del Tag", description = "Descripción de las operaciones de este tag")
+@Operation: Describe una operación (un endpoint específico).
+@Operation(summary = "Resumen corto", description = "Descripción detallada de lo que hace el endpoint")
+@Parameter: Describe un parámetro de la operación.
+@Parameter(description = "Descripción del parámetro", required = true, example = "valorEjemplo")
+@RequestBody: Describe el cuerpo de la solicitud.
+@RequestBody(description = "Descripción del cuerpo", required = true, content = @Content(schema = @Schema(implementation = MiClaseDTO.class)))
+@ApiResponse: Describe una posible respuesta de la operación.
+@ApiResponse(responseCode = "200", description = "Operación exitosa", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RespuestaDTO.class)))
+@ApiResponse(responseCode = "404", description = "Recurso no encontrado")
+@Schema: Describe la estructura de un modelo (DTO). Se puede usar en DTOs directamente.
+@Schema(description = "Identificador único del usuario", example = "123")

@@ -1,0 +1,132 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /medimicita
+
+
+  ssl:
+    # Cambia a true cuando tengas el keystore listo
+    enabled: true
+    # O JKS, según cómo generes tu keystore
+    key-store-type: PKCS12
+    # Ruta a tu keystore dentro de src/main/resources
+    key-store: classpath:certificadoSSL.p12
+    # Reemplaza con tu contraseña
+    key-store-password: Usco0101
+    # Reemplaza con el alias de tu certificado
+    key-alias: MySSLForMediMiCita
+
+spring:
+  application:
+    name: MediMiCita
+
+  # ----- DATASOURCE CONFIGURATION -----
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/db_medimicita
+    username: postgres
+    password: 0604
+
+  # ----- JPA/HIBERNATE CONFIGURATION -----
+  jpa:
+    hibernate:
+      # Para desarrollo. Cambiar a 'validate' o 'none' en producción.
+      # 'update': actualiza el esquema si es necesario.
+      # 'validate': valida que el esquema coincida con las entidades.
+      # 'none': no hace nada con el esquema (debes gestionarlo manualmente).
+      ddl-auto: update
+
+    # Muestra las SQL generadas por Hibernate en la consola (útil para debug)
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true # Formatea el SQL mostrado en la consola para mejor legibilidad
+        jdbc:
+          lob:
+            non_contextual_creation: true # Necesario para LOBs en PostgreSQL con versiones recientes de Hibernate
+
+
+  # ----- THYMELEAF CONFIGURATION -----
+  thymeleaf:
+    cache: false # Deshabilitar caché en desarrollo para ver cambios al instante
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML # Modo de las plantillas
+    encoding: UTF-8
+
+    # ----- INTERNATIONALIZATION (i18n) CONFIGURATION -----
+    messages:
+      basename: i18n/messages # Ruta base para los archivos de propiedades (messages_es.properties, messages_en.properties, etc.)
+      encoding: UTF-8
+      # fallback-to-system-locale: false # Opcional: si no encuentra una clave, no usa el locale del sistema
+
+  # ----- SPRING SECURITY (Opcional, algunas props comunes) -----
+#  security:
+#     user:
+#       name: user # Usuario en memoria por defecto (si no configuras UserDetailsService)
+#       password: password # Contraseña en memoria por defecto
+
+# ----- SWAGGER / OPENAPI CONFIGURATION -----
+springdoc:
+  api-docs:
+    path: /api-docs # Endpoint para la especificación OpenAPI JSON
+  swagger-ui:
+    path: /swagger-ui.html # Endpoint para la UI de Swagger
+    # display-request-duration: true # Opcional
+    # operations-sorter: alpha # Opcional
+    # tags-sorter: alpha # Opcional
+  # Opcional: Agrupa controladores por paquete para Swagger UI
+  # group-configs:
+  #   - group: 'patient-api'
+  #     paths-to-match: '/api/patient/**'
+  #   - group: 'doctor-api'
+  #     paths-to-match: '/api/doctor/**'
+  #   - group: 'admin-api'
+  #     paths-to-match: '/api/admin/**'
+
+# ----- JWT CONFIGURATION (si decides usarlo) -----
+# jwt:
+#   secret: "TU_SECRETO_JWT_SUPER_LARGO_Y_SEGURO_CAMBIAR_ESTO_URGENTEMENTE_USAR_VARIABLES_DE_ENTORNO"
+#   expiration:
+#     ms: 86400000 # 24 horas en milisegundos
+#   header: "Authorization"
+#   prefix: "Bearer "
+
+# ----- LOGGING CONFIGURATION (Opcional, Spring Boot tiene buenos defaults) -----
+# logging:
+#   level:
+#     co.edu.usco.medimicita: DEBUG # Nivel de log para tu paquete base
+#     org.springframework.web: INFO
+#     org.hibernate.SQL: DEBUG # Para ver las SQL (alternativa a spring.jpa.show-sql)
+#     org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Para ver los parámetros bindeados a las SQL
+
+# ----- MAIL CONFIGURATION (si necesitas enviar emails) -----
+# spring:
+#   mail:
+#     host: smtp.example.com
+#     port: 587
+#     username: tu_email_smtp
+#     password: tu_password_smtp
+#     properties:
+#       mail:
+#         smtp:
+#           auth: true
+#           starttls:
+#             enable: true
+#         debug: false # true para debug de envío de correos
+
+
+logging:
+  pattern:
+    dateformat: hh:mm
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
