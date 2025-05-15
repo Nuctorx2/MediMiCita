@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp; // Específico de Hibernate para timestamps automáticos
-
 import java.time.OffsetDateTime; // Recomendado para timestamps con zona horaria
 
 @Entity // (1) Marca esta clase como una entidad JPA.
@@ -29,13 +28,13 @@ public class RoleEntity {
 
     @CreationTimestamp // (11) Hibernate: Asigna automáticamente la fecha/hora de creación del registro.
     // Se ejecuta cuando la entidad es persistida por primera vez.
-    @Column(name = "created_at", nullable = false, updatable = false,
+    @Column(name = "role_created_at", nullable = false, updatable = false,
             columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP") // (12) Mapeo de columna:
     // nullable = false -> NOT NULL
     // updatable = false -> Esta columna no se actualiza una vez creada.
     // columnDefinition -> Específico para la BD. Asegura que si se inserta
     // directamente en BD, también tenga un valor por defecto.
-    private OffsetDateTime createdAt; // (13) java.time.OffsetDateTime para TIMESTAMP WITH TIME ZONE.
+    private OffsetDateTime roleCreatedAt; // (13) java.time.OffsetDateTime para TIMESTAMP WITH TIME ZONE.
     // Alternativamente, podrías usar LocalDateTime si no manejas zonas horarias explícitamente.
 
     // (14) Relaciones:
