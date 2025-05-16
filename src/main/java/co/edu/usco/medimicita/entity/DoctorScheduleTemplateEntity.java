@@ -59,7 +59,7 @@ public class DoctorScheduleTemplateEntity {
 
     @Column(name = "doctor_schedule_template_end_time", nullable = false, columnDefinition = "TIME")
     private LocalTime doctorScheduleTemplateEndTime; // Para tipo TIME
-    // (3) Constraint CHECK(end_time > start_time) se define en BD.
+    // (3) Constraint CHECK(end_time > start_time) se define en BD..
 
     @Column(name = "doctor_schedule_template_is_active", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     private Boolean doctorScheduleTemplateIsActive = true;
