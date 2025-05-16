@@ -8,7 +8,7 @@ import org.hibernate.annotations.CreationTimestamp; // Específico de Hibernate 
 import java.time.OffsetDateTime; // Recomendado para timestamps con zona horaria
 
 @Entity // (1) Marca esta clase como una entidad JPA.
-@Table(name = "roles") // (2) Especifica la tabla de la base de datos a la que se mapea.
+@Table(name = "role") // (2) Especifica la tabla de la base de datos a la que se mapea.
 @Data // (3) Lombok: Genera getters, setters, toString(), equals(), y hashCode().
 @NoArgsConstructor // (4) Lombok: Genera un constructor sin argumentos (requerido por JPA).
 @AllArgsConstructor // (5) Lombok: Genera un constructor con todos los argumentos (útil para crear instancias).
@@ -18,7 +18,7 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // (7) Configura la generación automática de la PK.
     // IDENTITY es común para PostgreSQL SERIAL/BIGSERIAL.
     @Column(name = "role_id") // (8) Mapea este campo a la columna 'role_id' en la tabla.
-    private Integer roleId; // (9) El tipo de dato Java para la PK (Integer para SERIAL).
+    private long roleId; // (9) El tipo de dato Java para la PK (Integer para SERIAL).
 
     @Column(name = "role_name", unique = true, nullable = false, length = 50) // (10) Mapeo de columna con constraints:
     // unique = true -> Constraint UNIQUE
@@ -39,8 +39,8 @@ public class RoleEntity {
 
     // (14) Relaciones:
     // Si necesitas navegar desde RoleEntity a los UserEntity que tienen este rol (relación inversa):
-    // @OneToMany(mappedBy = "role", fetch = FetchType.LAZY) // 'role' es el nombre del campo en UserEntity que mapea a RoleEntity.
-    // private java.util.List<UserEntity> users;
+     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY) // 'role' es el nombre del campo en UserEntity que mapea a RoleEntity.
+     private java.util.List<UserEntity> users;
     // Por ahora, la dejaremos comentada para mantener la entidad simple.
     // La agregarías si realmente necesitas esa navegación bidireccional.
 }

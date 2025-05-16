@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 9090
   servlet:
     context-path: /medimicita
 
@@ -7,11 +7,11 @@ server:
   ssl:
     # Cambia a true cuando tengas el keystore listo
     enabled: true
-    # O JKS, según cómo generes tu keystore
+    # O JKS, segï¿½n cï¿½mo generes tu keystore
     key-store-type: PKCS12
     # Ruta a tu keystore dentro de src/main/resources
     key-store: classpath:certificadoSSL.p12
-    # Reemplaza con tu contraseña
+    # Reemplaza con tu contraseï¿½a
     key-store-password: Usco0101
     # Reemplaza con el alias de tu certificado
     key-alias: MySSLForMediMiCita
@@ -30,13 +30,14 @@ spring:
   # ----- JPA/HIBERNATE CONFIGURATION -----
   jpa:
     hibernate:
-      # Para desarrollo. Cambiar a 'validate' o 'none' en producción.
+      # Para desarrollo. Cambiar a 'validate' o 'none' en producciï¿½n.
       # 'update': actualiza el esquema si es necesario.
       # 'validate': valida que el esquema coincida con las entidades.
       # 'none': no hace nada con el esquema (debes gestionarlo manualmente).
-      ddl-auto: update
+#       'create-drop': crea un esquema y lo elimina cuando se detenga el programa.
+      ddl-auto: create-drop
 
-    # Muestra las SQL generadas por Hibernate en la consola (útil para debug)
+    # Muestra las SQL generadas por Hibernate en la consola (ï¿½til para debug)
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -51,7 +52,7 @@ spring:
 
   # ----- THYMELEAF CONFIGURATION -----
   thymeleaf:
-    cache: false # Deshabilitar caché en desarrollo para ver cambios al instante
+    cache: false # Deshabilitar cachï¿½ en desarrollo para ver cambios al instante
     prefix: classpath:/templates/
     suffix: .html
     mode: HTML # Modo de las plantillas
@@ -67,12 +68,12 @@ spring:
 #  security:
 #     user:
 #       name: user # Usuario en memoria por defecto (si no configuras UserDetailsService)
-#       password: password # Contraseña en memoria por defecto
+#       password: password # Contraseï¿½a en memoria por defecto
 
 # ----- SWAGGER / OPENAPI CONFIGURATION -----
 springdoc:
   api-docs:
-    path: /api-docs # Endpoint para la especificación OpenAPI JSON
+    path: /api-docs # Endpoint para la especificaciï¿½n OpenAPI JSON
   swagger-ui:
     path: /swagger-ui.html # Endpoint para la UI de Swagger
     # display-request-duration: true # Opcional
@@ -101,7 +102,7 @@ springdoc:
 #     co.edu.usco.medimicita: DEBUG # Nivel de log para tu paquete base
 #     org.springframework.web: INFO
 #     org.hibernate.SQL: DEBUG # Para ver las SQL (alternativa a spring.jpa.show-sql)
-#     org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Para ver los parámetros bindeados a las SQL
+#     org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Para ver los parï¿½metros bindeados a las SQL
 
 # ----- MAIL CONFIGURATION (si necesitas enviar emails) -----
 # spring:
@@ -116,7 +117,7 @@ springdoc:
 #           auth: true
 #           starttls:
 #             enable: true
-#         debug: false # true para debug de envío de correos
+#         debug: false # true para debug de envï¿½o de correos
 
 
 logging:
