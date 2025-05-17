@@ -100,38 +100,37 @@ public class UserEntity {
     private List<DoctorScheduleTemplateEntity> doctorScheduleTemplates;
 
     // (7) Lado inverso de la relación con ScheduleExceptionEntity (excepciones creadas por este doctor)
-//    @OneToMany(mappedBy = "doctorUser", fetch = FetchType.LAZY)
-//    private List<ScheduleExceptionEntity> doctorScheduleExceptions;
+    @OneToMany(mappedBy = "doctorUser", fetch = FetchType.LAZY)
+    private List<ScheduleExceptionEntity> doctorScheduleExceptions;
 
     // (8) Lado inverso de la relación con ScheduleExceptionEntity (excepciones creadas por este admin)
-    // Nota: Si un usuario puede ser tanto doctor como admin que crea excepciones, necesitarías dos listas
-    // o una lógica más compleja. Dado el esquema, un usuario tiene un solo rol.
+    // Nota: Si un usuario puede ser tanto doctor como admin que crea excepciones, necesitarías dos listas o una lógica más compleja. Dado el esquema, un usuario tiene un solo rol.
     // Esta es para el 'created_by_user_id' en schedule_exceptions.
-//    @OneToMany(mappedBy = "createdByUser", fetch = FetchType.LAZY)
-//    private List<ScheduleExceptionEntity> adminCreatedScheduleExceptions;
+    @OneToMany(mappedBy = "createdByUser", fetch = FetchType.LAZY)
+    private List<ScheduleExceptionEntity> adminCreatedScheduleExceptions;
 
     // (9) Citas donde este usuario es el PACIENTE
-//    @OneToMany(mappedBy = "patientUser", fetch = FetchType.LAZY)
-//    private List<AppointmentEntity> patientAppointments;
+    @OneToMany(mappedBy = "patientUser", fetch = FetchType.LAZY)
+    private List<AppointmentEntity> patientAppointments;
 
     // (10) Citas donde este usuario es el MÉDICO
-//    @OneToMany(mappedBy = "doctorUser", fetch = FetchType.LAZY)
-//    private List<AppointmentEntity> doctorAppointments;
+    @OneToMany(mappedBy = "doctorUser", fetch = FetchType.LAZY)
+    private List<AppointmentEntity> doctorAppointments;
 
     // (11) Historiales clínicos donde este usuario es el PACIENTE
-//    @OneToMany(mappedBy = "patientUser", fetch = FetchType.LAZY)
-//    private List<ClinicalRecordEntity> patientClinicalRecords;
+    @OneToMany(mappedBy = "patientUser", fetch = FetchType.LAZY)
+    private List<ClinicalRecordEntity> patientClinicalRecords;
 
     // (12) Historiales clínicos donde este usuario es el MÉDICO que escribió la nota
-//    @OneToMany(mappedBy = "doctorUser", fetch = FetchType.LAZY)
-//    private List<ClinicalRecordEntity> doctorAuthoredClinicalRecords;
+    @OneToMany(mappedBy = "doctorUser", fetch = FetchType.LAZY)
+    private List<ClinicalRecordEntity> doctorAuthoredClinicalRecords;
 
     // (13) Tokens de reseteo de contraseña para este usuario
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    private List<PasswordResetTokenEntity> passwordResetTokens;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PasswordResetTokenEntity> passwordResetTokens;
 
     // (14) Citas canceladas por este usuario
-//    @OneToMany(mappedBy = "cancelledByUser", fetch = FetchType.LAZY)
-//    private List<AppointmentEntity> cancelledAppointments;
+    @OneToMany(mappedBy = "cancelledByUser", fetch = FetchType.LAZY)
+    private List<AppointmentEntity> cancelledAppointments;
 
 }

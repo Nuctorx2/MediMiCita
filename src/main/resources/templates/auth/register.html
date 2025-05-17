@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registro de Paciente</title>
+    <!-- Estilos CSS -->
+</head>
+<body>
+<h1>Registro de Paciente</h1>
+
+<!-- Mostrar error de registro global (ej. email ya existe) -->
+<div th:if="${registrationError}" class="alert alert-danger" th:text="${registrationError}"></div>
+<!-- Mostrar mensaje de éxito de registro -->
+<div th:if="${param.registrationSuccess}" class="alert alert-success">
+    ¡Registro exitoso! Por favor, inicia sesión.
+</div>
+
+
+<form th:action="@{/register}" th:object="${userDto}" method="post">
+    <div>
+        <label for="identificationNumber">Número de Identificación:</label>
+        <input type="text" id="identificationNumber" th:field="*{identificationNumber}" />
+        <span th:if="${#fields.hasErrors('identificationNumber')}" th:errors="*{identificationNumber}" class="error-message"></span>
+    </div>
+    <div>
+        <label for="firstName">Nombres:</label>
+        <input type="text" id="firstName" th:field="*{firstName}" />
+        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error-message"></span>
+    </div>
+    <div>
+        <label for="lastName">Apellidos:</label>
+        <input type="text" id="lastName" th:field="*{lastName}" />
+        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error-message"></span>
+    </div>
+    <div>
+        <label for="birthDate">Fecha de Nacimiento:</label>
+        <input type="date" id="birthDate" th:field="*{birthDate}" />
+        <span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" class="error-message"></span>
+    </div>
+    <div>
+        <label for="phoneNumber">Celular:</label>
+        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" />
+        <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error-message"></span>
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" th:field="*{email}" />
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+    </div>
+    <div>
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" th:field="*{password}" />
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></span>
+    </div>
+    <div>
+        <label for="confirmPassword">Confirmar Contraseña:</label>
+        <input type="password" id="confirmPassword" th:field="*{confirmPassword}" />
+        <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="error-message"></span>
+    </div>
+
+    <!-- Campo para EPS (si es un paciente) -->
+    <div>
+        <label for="epsId">EPS:</label>
+        <select id="epsId" th:field="*{epsId}">
+            <option value="">Seleccione una EPS</option>
+            <!-- <option th:each="eps : ${epsList}" th:value="${eps.epsId}" th:text="${eps.epsName}"></option> -->
+        </select>
+        <span th:if="${#fields.hasErrors('epsId')}" th:errors="*{epsId}" class="error-message"></span>
+    </div>
+
+    <div>
+        <input type="checkbox" id="termsAccepted" th:field="*{termsAccepted}" />
+        <label for="termsAccepted">Acepto los términos y condiciones</label>
+        <span th:if="${#fields.hasErrors('termsAccepted')}" th:errors="*{termsAccepted}" class="error-message"></span>
+    </div>
+
+    <div>
+        <button type="submit">Registrar</button>
+    </div>
+</form>
+</body>
+</html>
