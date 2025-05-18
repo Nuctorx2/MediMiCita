@@ -258,8 +258,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserEntity save(UserEntity userEntity) {
-        // Este método save genérico podría ser usado internamente o para casos simples.
-        // Si se está actualizando una contraseña a través de este método, asegurarse que ya esté hasheada.
+        // Este metodo save genérico podría ser usado internamente o para casos simples.
+        // Si se está actualizando una contraseña a través de este metodo, asegurarse que ya esté hasheada.
         return userRepository.save(userEntity);
     }
 
