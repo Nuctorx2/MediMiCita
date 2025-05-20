@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenido - Medimicita</title>
+    <!-- Enlace a CSS o framework de tu elección -->
+    <link rel="stylesheet" href="/templates/style/style.css">
+</head>
+<body>
+<header>
+    <h1>Medimicita</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/login}">Iniciar Sesión</a></li>
+            <li><a th:href="@{/register}">Registrarse</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="welcome">
+        <h2>Bienvenido a Medimicita</h2>
+        <p>Por favor, inicia sesión o regístrate para acceder a tu panel.</p>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Medimicita. Todos los derechos reservados.</p>
+</footer>
+</body>
+</html>

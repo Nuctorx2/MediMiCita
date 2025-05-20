@@ -1,0 +1,28 @@
+<!-- doctor/dashboard.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Médico - Medimicita</title>
+    <link rel="stylesheet" href="/templates/style/style.css">
+</head>
+<body>
+<header>
+    <h1>Panel de Médico</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/doctor/appointments}">Mis Citas</a></li>
+            <li><a th:href="@{/doctor/patients}">Pacientes</a></li>
+            <li><a th:href="@{/logout}">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section>
+        <h2>Bienvenido, Dr. <span th:text="${#authentication.name}"></span></h2>
+        <p>Próximas citas y alertas.</p>
+        <!-- Aquí va contenido dinámico para médico -->
+    </section>
+</main>
+</body>
+</html>

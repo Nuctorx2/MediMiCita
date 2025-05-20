@@ -1,0 +1,158 @@
+/* styles.css - Medimicita */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header {
+    background-color: #0069d9;
+    color: #fff;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 0 0 8px 8px;
+}
+
+header h1 {
+    font-size: 1.8rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 0 20px 20px;
+}
+
+.welcome {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.welcome h2 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    font-size: 1rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.button,
+button[type="submit"] {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0069d9;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.button:hover,
+button[type="submit"]:hover {
+    background-color: #0053ba;
+}
+
+footer {
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 30px;
+    background-color: #e9ecef;
+    border-radius: 8px;
+}
+
+/* Estilos de sección de error */
+.error-message {
+    color: #d9534f;
+}
+.success-message {
+    color: #28a745;
+}
+
+/* Ajustes específicos de dashboards */
+main section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+main section h2 {
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+main section p {
+    margin-bottom: 15px;
+}
+
+/* Listas de navegación internas */
+nav ul li {
+    list-style: none;
+}
+
+nav ul li a {
+    color: #0069d9;
+}
+
+nav ul li a:hover {
+    color: #004085;
+}

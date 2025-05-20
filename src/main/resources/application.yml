@@ -48,6 +48,13 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true # Necesario para LOBs en PostgreSQL con versiones recientes de Hibernate
+      defer-datasource-initialization: true
+  sql:
+    init:
+      mode: never # O 'embedded'. 'always' ejecutará los scripts DDL y DML.
+      # 'embedded' solo para BDs en memoria (H2, HSQLDB, Derby).
+      # Para PostgreSQL en desarrollo, 'always' es útil.
+      # platform: postgresql # Opcional, Spring Boot usualmente lo detecta.
 
 
   # ----- THYMELEAF CONFIGURATION -----
@@ -59,10 +66,10 @@ spring:
     encoding: UTF-8
 
     # ----- INTERNATIONALIZATION (i18n) CONFIGURATION -----
-    messages:
-      basename: i18n/messages # Ruta base para los archivos de propiedades (messages_es.properties, messages_en.properties, etc.)
-      encoding: UTF-8
-      # fallback-to-system-locale: false # Opcional: si no encuentra una clave, no usa el locale del sistema
+  messages:
+    basename: i18n/messages # Ruta base para los archivos de propiedades (messages_es.properties, messages_en.properties, etc.)
+    encoding: UTF-8
+    # fallback-to-system-locale: false # Opcional: si no encuentra una clave, no usa el locale del sistema
 
   # ----- SPRING SECURITY (Opcional, algunas props comunes) -----
 #  security:

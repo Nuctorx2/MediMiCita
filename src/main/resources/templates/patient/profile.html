@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title th:text="${pageTitle ?: 'Mi Perfil'}">Mi Perfil</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
+        <h1>Mi Perfil</h1>
+
+        <div th:if="${user != null}" class="card">
+            <div class="card-header">
+                Información Personal
+            </div>
+            <div class="card-body">
+                <p><strong>Nombre Completo:</strong> <span th:text="${user.userFirstName + ' ' + user.userLastName}"></span></p>
+                <p><strong>Número de Identificación:</strong> <span th:text="${user.userIdentificationNumber}"></span></p>
+                <p><strong>Fecha de Nacimiento:</strong> <span th:text="${#temporals.format(user.userBirthDate, 'dd/MM/yyyy')}"></span></p>
+                <p><strong>Email:</strong> <span th:text="${user.userEmail}"></span></p>
+                <p><strong>Celular:</strong> <span th:text="${user.userPhoneNumber ?: 'No registrado'}"></span></p>
+                <p th:if="${user.eps != null}"><strong>EPS:</strong> <span th:text="${user.eps.epsName}"></span></p>
+                <p th:if="${user.userTermsAcceptedAt != null}"><strong>Términos Aceptados el:</strong> <span th:text="${#temporals.format(user.userTermsAcceptedAt, 'dd/MM/yyyy HH:mm')}"></span></p>
+
+                <!-- Mostrar Dirección (AHORA MUCHO MÁS SIMPLE) -->
+                <h4>Dirección:</h4>
+                <div th:if="${currentAddress != null}">
+                    <p>
+                        <strong>Actual: </strong>
+                        <span th:text="${currentAddress.userAddressStreetType}"></span>
+                        <span th:text="${currentAddress.userAddressStreetNumber}"></span>,
+                        <span th:if="${currentAddress.userAddressCrossStreetNumber}" th:text="${' ' + currentAddress.userAddressCrossStreetNumber}"></span>
+                        <span th:if="${currentAddress.userAddressMeters}" th:text="${' (' + currentAddress.userAddressMeters + ')'}"></span>
+                        <br/>
+                        <span th:text="${currentAddress.userAddressAdditionalInfo}"></span>
+                    </p>
+                </div>
+                <div th:if="${currentAddress == null && user.userAddresses != null && !#lists.isEmpty(user.userAddresses)}">
+                    <p>No tienes una dirección marcada como actual.</p>
+                </div>
+                <div th:if="${user.userAddresses == null || #lists.isEmpty(user.userAddresses)}">
+                    <p>No tienes direcciones registradas.</p>
+                </div>
+
+                <!-- Opcional: Listar todas las direcciones si quieres (asume que pasas allAddresses desde el controlador)
+                <div th:if="${allAddresses != null && !#lists.isEmpty(allAddresses)}">
+                    <h5>Todas Mis Direcciones:</h5>
+                    <ul>
+                        <li th:each="address : ${allAddresses}">
+                            <span th:text="${address.userAddressStreetType}"></span>
+                            <span th:text="${address.userAddressStreetNumber}"></span> -
+                            <span th:text="${address.userAddressAdditionalInfo}"></span>
+                            <span th:if="${address.userAddressIsCurrent}" class="badge bg-success">Actual</span>
+                        </li>
+                    </ul>
+                </div>
+                -->
+
+            </div>
+            <div class="card-footer">
+                <a th:href="@{/patient/profile/edit}" class="btn btn-primary">Editar Perfil</a>
+            </div>
+        </div>
+        <div th:if="${user == null}">
+            <p class="alert alert-warning">No se pudo cargar la información del perfil.</p>
+        </div>
+
+        <div class="mt-3">
+            <a th:href="@{/patient/dashboard}" class="btn btn-secondary">Volver al Dashboard</a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

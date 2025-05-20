@@ -1,80 +1,65 @@
-package co.edu.usco.medimicita.controller.web; // O donde tengas tus controladores web
+package co.edu.usco.medimicita.controller.web;
 
-import co.edu.usco.medimicita.dto.UserRegistrationDto;
-import co.edu.usco.medimicita.service.UserService;
-import jakarta.validation.Valid; // Importante
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest; // Para la redirección basada en rol
+import org.springframework.security.core.Authentication; // Para obtener detalles del usuario autenticado
+import org.springframework.security.core.context.SecurityContextHolder; // Para obtener el contexto de seguridad
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult; // Para capturar errores de validación
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller
-@RequestMapping("/register") // Asumiendo una ruta base para el registro
+@Controller // (1) Anota la clase como un controlador de Spring MVC
 public class AuthController {
 
-    private final UserService userService;
-
-    @Autowired
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    // (2) Método para mostrar la página de login
+    @GetMapping("/login")
+    public String loginPage(@RequestParam(value = "error", required = false) String error,
+                            @RequestParam(value = "logout", required = false) String logout,
+                            Model model) {
+        if (error != null) {
+            model.addAttribute("errorMessage", "Usuario o contraseña incorrectos.");
+        }
+        if (logout != null) {
+            model.addAttribute("logoutMessage", "Has cerrado sesión exitosamente.");
+        }
+        // (3) Verificar si el usuario ya está autenticado para no mostrar el login de nuevo
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+            return "redirect:/default-success"; // Redirigir si ya está logueado
+        }
+        return "login"; // Devuelve el nombre de la plantilla Thymeleaf (login.html)
     }
 
-    @GetMapping
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("userDto", new UserRegistrationDto()); // Objeto para el formulario
-        // model.addAttribute("epsList", epsService.findAllActive()); // Para el desplegable de EPS
-        return "auth/register"; // Nombre de tu plantilla Thymeleaf
+    // (4) Método para la redirección después de un login exitoso
+    @GetMapping("/default-success")
+    public String defaultSuccessPage(HttpServletRequest request) {
+        // HttpServletRequest.isUserInRole espera el nombre del rol SIN el prefijo "ROLE_"
+        if (request.isUserInRole("ADMINISTRADOR")) {
+            return "redirect:/admin/dashboard"; // Asegúrate que esta ruta exista o la crearás
+        } else if (request.isUserInRole("MEDICO")) {
+            return "redirect:/doctor/dashboard"; // Asegúrate que esta ruta exista o la crearás
+        } else if (request.isUserInRole("PACIENTE")) {
+            return "redirect:/patient/dashboard"; // Asegúrate que esta ruta exista o la crearás
+        }
+        // Fallback si el rol no se reconoce o para usuarios sin un dashboard específico
+        // Podría ser la página de inicio o una página de error/perfil genérico.
+        return "redirect:/"; // O "redirect:/user/profile" o alguna página por defecto
     }
 
-    @PostMapping
-    public String processRegistration(
-            @Valid @ModelAttribute("userDto") UserRegistrationDto userDto, // (1) @Valid aquí
-            BindingResult bindingResult, // (2) Captura los resultados de la validación
-            Model model) {
-
-        // (3) Validar que las contraseñas coincidan (cross-field validation, si no usas anotación a nivel de clase)
-        if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
-            // Añade un error específico al campo 'confirmPassword' o un error global
-            bindingResult.rejectValue("confirmPassword", "error.userDto", "Las contraseñas no coinciden.");
-            // O para un error global:
-            // bindingResult.reject("passwords.mismatch", "Las contraseñas no coinciden.");
+    // (Opcional) Página de inicio simple
+    @GetMapping("/")
+    public String homePage() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+            return "redirect:/default-success"; // Si está logueado, redirigir a su dashboard
         }
-
-        // (4) Validar complejidad de contraseña si no se hizo con anotación personalizada
-        // if (!isPasswordComplexEnough(userDto.getPassword())) {
-        //    bindingResult.rejectValue("password", "error.userDto", "La contraseña no cumple los requisitos de complejidad.");
-        // }
-
-
-        if (bindingResult.hasErrors()) {
-            // model.addAttribute("epsList", epsService.findAllActive()); // Volver a cargar datos necesarios para el form
-            return "auth/register"; // Vuelve al formulario si hay errores
-        }
-
-        try {
-            userService.registerNewPatient(userDto);
-            // return "redirect:/register?success"; // Redirige a una página de éxito o al login
-            return "redirect:/login?registrationSuccess";
-        } catch (RuntimeException ex) { // Captura excepciones del servicio (ej. email ya existe)
-            // model.addAttribute("epsList", epsService.findAllActive());
-            model.addAttribute("registrationError", ex.getMessage());
-            return "auth/register";
-        }
+        return "index"; // Nombre de tu plantilla para la página de inicio (index.html)
+        // Esta página puede tener enlaces a /login y /register
     }
 
-    // private boolean isPasswordComplexEnough(String password) {
-    //     if (password == null || password.length() < 8 || password.length() > 20) return false;
-    //     boolean hasUpper = false, hasLower = false, hasSpecial = false;
-    //     String specialChars = "@#$%%"; // Tu lista de caracteres especiales
-    //     for (char c : password.toCharArray()) {
-    //         if (Character.isUpperCase(c)) hasUpper = true;
-    //         else if (Character.isLowerCase(c)) hasLower = true;
-    //         else if (specialChars.indexOf(c) != -1) hasSpecial = true;
-    //     }
-    //     return hasUpper && hasLower && hasSpecial;
-    // }
+    // (Opcional pero recomendado) Página de acceso denegado
+    @GetMapping("/access-denied")
+    public String accessDeniedPage() {
+        return "error/403"; // Nombre de tu plantilla para error 403 (access_denied.html o 403.html)
+    }
 }

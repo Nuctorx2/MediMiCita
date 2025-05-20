@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}"> <!-- (1) Haremos referencia a un layout principal -->
+<head>
+  <title th:text="${pageTitle ?: 'Dashboard Paciente'}">Dashboard Paciente</title>
+  <!-- Puedes añadir CSS específico para esta página aquí si es necesario -->
+</head>
+<body>
+<section layout:fragment="content"> <!-- (2) Contenido específico de esta página -->
+  <div class="container mt-4">
+    <h1>Bienvenido al Dashboard del Paciente</h1>
+    <p>Hola, <strong th:text="${username ?: 'Usuario'}">Usuario</strong>!</p>
+
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Mi Perfil</h5>
+            <p class="card-text">Ver y actualizar tu información personal.</p>
+            <a th:href="@{/patient/profile}" class="btn btn-primary">Ir a Mi Perfil</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Mis Citas</h5>
+            <p class="card-text">Ver tus citas agendadas y tu historial de citas.</p>
+            <a th:href="@{/patient/appointments}" class="btn btn-primary">Ver Mis Citas</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Agendar Nueva Cita</h5>
+            <p class="card-text">Busca disponibilidad y agenda una nueva cita médica.</p>
+            <a th:href="@{/patient/appointments/new/select-specialty}" class="btn btn-success">Agendar Cita</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Mi Historial Clínico</h5>
+            <p class="card-text">Consulta tu historial clínico registrado por los médicos.</p>
+            <a th:href="@{/patient/clinical-history}" class="btn btn-info">Ver Historial Clínico</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aquí se mostrará más información relevante para el paciente -->
+
+  </div>
+</section>
+</body>
+</html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <title>Dashboard Paciente Simple</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Dashboard Paciente Simple</h1>-->
+<!--<p>Hola, <span th:text="${username ?: 'Test'}">Test</span>!</p>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--      layout:decorate="~{layouts/main-layout}">-->
+<!--<head>-->
+<!--  <title>Dashboard Paciente con Layout</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<section layout:fragment="content">-->
+<!--  <div class="container mt-4">-->
+<!--    <h1>Dashboard Paciente Simple con Layout</h1>-->
+<!--    <p>Hola, <strong th:text="${username ?: 'Usuario'}">Usuario</strong>!</p>-->
+<!--  </div>-->
+<!--</section>-->
+<!--</body>-->
+<!--</html>-->
