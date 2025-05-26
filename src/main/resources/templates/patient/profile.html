@@ -4,6 +4,7 @@
       layout:decorate="~{layouts/main-layout}">
 <head>
     <title th:text="${pageTitle ?: 'Mi Perfil'}">Mi Perfil</title>
+    <link rel="stylesheet" th:href="@{../css/style.css}">
 </head>
 <body>
 <section layout:fragment="content">
@@ -24,39 +25,25 @@
                 <p th:if="${user.userTermsAcceptedAt != null}"><strong>Términos Aceptados el:</strong> <span th:text="${#temporals.format(user.userTermsAcceptedAt, 'dd/MM/yyyy HH:mm')}"></span></p>
 
                 <!-- Mostrar Dirección (AHORA MUCHO MÁS SIMPLE) -->
-                <h4>Dirección:</h4>
                 <div th:if="${currentAddress != null}">
                     <p>
                         <strong>Actual: </strong>
-                        <span th:text="${currentAddress.userAddressStreetType}"></span>
-                        <span th:text="${currentAddress.userAddressStreetNumber}"></span>,
-                        <span th:if="${currentAddress.userAddressCrossStreetNumber}" th:text="${' ' + currentAddress.userAddressCrossStreetNumber}"></span>
-                        <span th:if="${currentAddress.userAddressMeters}" th:text="${' (' + currentAddress.userAddressMeters + ')'}"></span>
+                        <span th:text="${currentAddress.userAddressStreetType?.displayName}"></span> <!-- Usar displayName del Enum -->
+                        <span th:text="${currentAddress.userAddressMainWayNumber}"></span>
+                        # <span th:text="${currentAddress.userAddressSecondaryWayNumber}"></span>
+                        - <span th:text="${currentAddress.userAddressHouseOrBuildingNumber}"></span>
+                        <th:block th:if="${currentAddress.userAddressComplement != null && !currentAddress.userAddressComplement.isBlank()}">
+                            , <span th:text="${currentAddress.userAddressComplement}"></span>
+                        </th:block>
                         <br/>
-                        <span th:text="${currentAddress.userAddressAdditionalInfo}"></span>
+                        Barrio/Vereda: <span th:text="${currentAddress.userAddressNeighborhood}"></span>
+                        <br/>
+                        <span th:text="${currentAddress.userAddressMunicipality}"></span>,
+                        <span th:text="${currentAddress.userAddressDepartment}"></span>
+                        <br/>
+                        Zona: <span th:text="${currentAddress.userAddressZone?.displayName}"></span> <!-- Usar displayName del Enum -->
                     </p>
                 </div>
-                <div th:if="${currentAddress == null && user.userAddresses != null && !#lists.isEmpty(user.userAddresses)}">
-                    <p>No tienes una dirección marcada como actual.</p>
-                </div>
-                <div th:if="${user.userAddresses == null || #lists.isEmpty(user.userAddresses)}">
-                    <p>No tienes direcciones registradas.</p>
-                </div>
-
-                <!-- Opcional: Listar todas las direcciones si quieres (asume que pasas allAddresses desde el controlador)
-                <div th:if="${allAddresses != null && !#lists.isEmpty(allAddresses)}">
-                    <h5>Todas Mis Direcciones:</h5>
-                    <ul>
-                        <li th:each="address : ${allAddresses}">
-                            <span th:text="${address.userAddressStreetType}"></span>
-                            <span th:text="${address.userAddressStreetNumber}"></span> -
-                            <span th:text="${address.userAddressAdditionalInfo}"></span>
-                            <span th:if="${address.userAddressIsCurrent}" class="badge bg-success">Actual</span>
-                        </li>
-                    </ul>
-                </div>
-                -->
-
             </div>
             <div class="card-footer">
                 <a th:href="@{/patient/profile/edit}" class="btn btn-primary">Editar Perfil</a>

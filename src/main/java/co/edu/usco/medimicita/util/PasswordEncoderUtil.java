@@ -14,14 +14,18 @@
 //
 //        // (3) Define las contraseñas en texto plano que quieres hashear
 //        String adminPassword = "admin123";
-//        String medicoPassword = "medico123";
+//        String medicoGeneralPassword = "general123";
+//        String medicoOdonPassword = "odontologia123";
+//        String medicoGinePassword = "ginecologia123";
 //        String pacientePassword = "paciente123";
 //        // Añade más si necesitas
 //
 //        // (4) Hashea cada contraseña e imprímela en la consola
 //        System.out.println("--- BCrypt Hashes Generados ---");
 //        System.out.println("Contraseña: " + adminPassword + " -> Hash: " + passwordEncoder.encode(adminPassword));
-//        System.out.println("Contraseña: " + medicoPassword + " -> Hash: " + passwordEncoder.encode(medicoPassword));
+//        System.out.println("Contraseña: " + medicoGeneralPassword + " -> Hash: " + passwordEncoder.encode(medicoGeneralPassword));
+//        System.out.println("Contraseña: " + medicoOdonPassword + " -> Hash: " + passwordEncoder.encode(medicoOdonPassword));
+//        System.out.println("Contraseña: " + medicoGinePassword + " -> Hash: " + passwordEncoder.encode(medicoGinePassword));
 //        System.out.println("Contraseña: " + pacientePassword + " -> Hash: " + passwordEncoder.encode(pacientePassword));
 //        System.out.println("-------------------------------");
 //

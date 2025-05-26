@@ -15,12 +15,23 @@ public interface ScheduleExceptionRepository extends JpaRepository<ScheduleExcep
 
     List<ScheduleExceptionEntity> findByDoctorUser(UserEntity doctorUser);
 
-    // Encuentra excepciones para un doctor que se solapan con un rango de tiempo dado
-    @Query("SELECT se FROM ScheduleExceptionEntity se WHERE se.doctorUser = :doctorUser " +
-            "AND se.scheduleExceptionStartDatetime < :endDateTime " +
-            "AND se.scheduleExceptionEndDatetime > :startDateTime")
+    /**
+     * Encuentra todas las excepciones de horario para un médico específico que se solapan
+     * con el rango de tiempo [rangeStart, rangeEnd).
+     * Un solapamiento ocurre si la excepción comienza antes de que el rango termine Y
+     * la excepción termina después de que el rango comience.
+     *
+     * @param doctorUser El médico para el cual buscar excepciones.
+     * @param rangeStart El inicio del rango de tiempo a verificar (exclusivo en el límite superior de la excepción).
+     * @param rangeEnd   El fin del rango de tiempo a verificar (exclusivo en el límite inferior de la excepción).
+     * @return Una lista de ScheduleExceptionEntity que se solapan.
+     */
+    @Query("SELECT se FROM ScheduleExceptionEntity se " +
+            "WHERE se.doctorUser = :doctorUser " +
+            "AND se.scheduleExceptionStartDatetime < :rangeEnd " + // La excepción empieza antes de que el rango termine
+            "AND se.scheduleExceptionEndDatetime > :rangeStart")   // Y la excepción termina después de que el rango empiece
     List<ScheduleExceptionEntity> findOverlappingExceptionsForDoctor(
             @Param("doctorUser") UserEntity doctorUser,
-            @Param("startDateTime") OffsetDateTime startDateTime,
-            @Param("endDateTime") OffsetDateTime endDateTime);
+            @Param("rangeStart") OffsetDateTime rangeStart,
+            @Param("rangeEnd") OffsetDateTime rangeEnd);
 }

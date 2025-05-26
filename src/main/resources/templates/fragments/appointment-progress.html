@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="progress-bar (currentStep)" class="steps-container mb-4">
+  <div class="step" th:classappend="${currentStep == 1 ? 'active' : (currentStep > 1 ? 'completed' : 'inactive')}">
+    <div class="step-number">1</div>
+    <div class="step-label">Especialidad</div>
+  </div>
+  <div class="step" th:classappend="${currentStep == 2 ? 'active' : (currentStep > 2 ? 'completed' : 'inactive')}">
+    <div class="step-number">2</div>
+    <div class="step-label">Fecha y Hora</div> <!-- Simplificado, sin médico por ahora -->
+  </div>
+  <div class="step" th:classappend="${currentStep == 3 ? 'active' : 'inactive'}">
+    <div class="step-number">3</div>
+    <div class="step-label">Confirmación</div>
+  </div>
+</div>
+</body>
+</html>

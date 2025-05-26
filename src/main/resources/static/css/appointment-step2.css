@@ -1,0 +1,10 @@
+.scheduler-layout { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; margin-bottom: 2rem; }
+.controls-panel, .time-slots-card-container { background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.calendar-day.available { background-color: #d1e7dd; cursor: pointer; }
+.calendar-day.selected { background-color: #0d6efd; color: white; }
+.time-slot { padding: 0.75rem; border: 1px solid #ccc; margin-bottom: 0.5rem; border-radius: 4px; cursor: pointer; }
+.time-slot:hover { background-color: #e9ecef; }
+.time-slot.selected { background-color: #0d6efd; color: white; }
+.time-slot-doctor-badge { font-size: 0.8em; background-color: #6c757d; color: white; padding: 0.2em 0.4em; border-radius: 3px; margin-left: 5px; }
+.loader { border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }

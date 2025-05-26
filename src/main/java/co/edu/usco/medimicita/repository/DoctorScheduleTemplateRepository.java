@@ -5,7 +5,6 @@ import co.edu.usco.medimicita.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.DayOfWeek;
 import java.util.List;
 
 @Repository
@@ -16,5 +15,5 @@ public interface DoctorScheduleTemplateRepository extends JpaRepository<DoctorSc
     List<DoctorScheduleTemplateEntity> findByDoctorUserAndDoctorScheduleTemplateIsActiveTrue(UserEntity doctorUser);
 
     List<DoctorScheduleTemplateEntity> findByDoctorUserAndDoctorScheduleTemplateDayOfWeekAndDoctorScheduleTemplateIsActiveTrue(
-            UserEntity doctorUser, DayOfWeek dayOfWeek);
+            UserEntity doctorUser, Integer dayOfWeek);
 }

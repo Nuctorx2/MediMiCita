@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.DayOfWeek; // Para el día de la semana
-import java.time.LocalTime; // Para la hora de inicio y fin
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 // (1) Constraint UNIQUE a nivel de tabla para (doctor_user_id, day_of_week, start_time, end_time)
@@ -40,19 +40,8 @@ public class DoctorScheduleTemplateEntity {
     private UserEntity doctorUser; // El médico al que pertenece esta plantilla de horario
 
     // (2) Día de la semana. ISO 8601: 1 (Lunes) a 7 (Domingo).
-    @Enumerated(EnumType.ORDINAL) // Almacena el ordinal del enum (0 para LUNES, 1 para MARTES, etc. si DayOfWeek empieza en LUNES)
-    // O podrías usar EnumType.STRING si prefieres almacenar el nombre ("MONDAY", "TUESDAY").
-    // O simplemente un Integer si no usas enum.
     @Column(name = "doctor_schedule_template_day_of_week", nullable = false)
-    private DayOfWeek doctorScheduleTemplateDayOfWeek; // java.time.DayOfWeek (LUNES=1, ..., DOMINGO=7)
-    // El ordinal de DayOfWeek va de 0 (MONDAY) a 6 (SUNDAY)
-    // Si necesitas 1-7, tendrás que ajustar al persistir/recuperar o usar Integer.
-
-    // OJO: DayOfWeek.getValue() devuelve 1-7, DayOfWeek.ordinal() devuelve 0-6.
-
-    // Para que coincida con ISO 1-7, si usas ORDINAL, DayOfWeek.MONDAY (valor 1) se guardaría como 0.
-    // Es más seguro usar un Integer aquí y mapear manualmente si quieres 1-7 estrictamente.
-    // Por simplicidad con EnumType.ORDINAL, aceptaremos 0-6.
+    private Integer doctorScheduleTemplateDayOfWeek; // java.time.DayOfWeek (LUNES=1, ...,
 
     @Column(name = "doctor_schedule_template_start_time", nullable = false, columnDefinition = "TIME")
     private LocalTime doctorScheduleTemplateStartTime; // Para tipo TIME

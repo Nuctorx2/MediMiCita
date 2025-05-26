@@ -4,7 +4,7 @@
       layout:decorate="~{layouts/main-layout}"> <!-- (1) Haremos referencia a un layout principal -->
 <head>
   <title th:text="${pageTitle ?: 'Dashboard Paciente'}">Dashboard Paciente</title>
-  <!-- Puedes añadir CSS específico para esta página aquí si es necesario -->
+  <link rel="stylesheet" th:href="@{../css/style.css}">
 </head>
 <body>
 <section layout:fragment="content"> <!-- (2) Contenido específico de esta página -->

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title th:text="${pageTitle ?: 'Seleccionar Horario'}">Seleccionar Horario</title>
+    <!-- CSS específico para esta página, inspirado en tu codeAgendarCitaPaso2.html -->
+    <!-- Puedes tomar los estilos de .scheduler-layout, .controls-panel, etc. de tu HTML
+         y ponerlos aquí o en un archivo CSS enlazado. -->
+    <link th:href="@{/css/appointment-step2.css}" rel="stylesheet">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
+        <h1 class="page-title">Agendar Nueva Cita</h1>
+        <p class="page-subtitle" th:text="'Paso 2: Selecciona Médico, Fecha y Hora para ' + ${specialtyName}"></p>
+
+        <!-- Barra de progreso (similar al paso 1) -->
+        <div class="steps-container" th:replace="~{fragments/appointment-progress :: progress-bar(currentStep=${progressStep})}"></div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <!-- Formulario que enviará los datos al Paso 3 -->
+        <form id="selectSlotForm" th:action="@{/patient/appointments/new/select-slot}" method="post">
+            <input type="hidden" name="specialtyId" th:value="${specialtyId}" />
+            <input type="hidden" name="selectedDate" id="selectedDateInput" required />
+            <input type="hidden" name="selectedTime" id="selectedTimeInput" required />
+            <input type="hidden" name="selectedDoctorId" id="selectedDoctorIdInput" />
+            <!-- CSRF Token -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <div class="scheduler-layout">
+                <!-- Panel de Controles (Selector de Médico y Calendario) -->
+                <div class="controls-panel">
+                    <!-- Selector de Médico (Opcional, lo implementaremos más tarde si es necesario) -->
+                    <!--
+                    <div class="doctor-filter-card">
+                        <h3>Selecciona un Médico</h3>
+                        <select id="doctorFilter" class="form-select" aria-label="Selecciona un médico">
+                            <option value="" selected>Todos los Médicos Disponibles</option>
+                            <option th:each="doc : ${availableDoctors}" th:value="${doc.userId}" th:text="${doc.userFirstName + ' ' + doc.userLastName}"></option>
+                        </select>
+                    </div>
+                    -->
+
+                    <!-- Calendario -->
+                    <div class="calendar-card-container">
+                        <h3>Selecciona una Fecha</h3>
+                        <div class="calendar-container">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="prevMonthBtn"><</button>
+                                <h5 id="calendarTitle">Mes Año</h5>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="nextMonthBtn">></button>
+                            </div>
+                            <div class="calendar-weekdays d-flex">
+                                <div class="p-1 text-center" style="width: 14.28%;">Dom</div>
+                                <div class="p-1 text-center" style="width: 14.28%;">Lun</div>
+                                <div class="p-1 text-center" style="width: 14.28%;">Mar</div>
+                                <div class="p-1 text-center" style="width: 14.28%;">Mié</div>
+                                <div class="p-1 text-center" style="width: 14.28%;">Jue</div>
+                                <div class="p-1 text-center" style="width: 14.28%;">Vie</div>
+                                <div class="p-1 text-center" style="width: 14.28%;">Sáb</div>
+                            </div>
+                            <div class="calendar-days d-flex flex-wrap" id="calendarDaysGrid">
+                                <!-- Los días se generarán con JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel de Disponibilidad (Slots de Horarios) -->
+                <div class="time-slots-card-container">
+                    <h3>Horarios Disponibles para <span id="selectedDateTitle">-- de --</span></h3>
+                    <div class="loader" id="slotsLoader"></div>
+                    <div class="time-slots-grid" id="timeSlotsGrid">
+                        <p id="noSlotsMessage" class="text-muted" style="display: none;">
+                            Selecciona una fecha con disponibilidad para ver los horarios.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de navegación -->
+            <div class="buttons-container mt-3 d-flex justify-content-between">
+                <a th:href="@{/patient/appointments/new/select-specialty}" class="btn btn-secondary">
+                    <i class="material-icons">arrow_back</i> Anterior
+                </a>
+                <button type="submit" class="btn btn-primary" id="nextStepBtn" disabled>
+                    Continuar <i class="material-icons">arrow_forward</i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Pasar datos del backend a JavaScript -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const initialAvailableDates = /*[[${availableDates}]]*/ []; // Debe ser una lista de Strings "YYYY-MM-DD"
+        const initialYearMonth = /*[[${currentYearMonth}]]*/ '2025-01'; // String "YYYY-MM"
+        const specialtyId = /*[[${specialtyId}]]*/ null;
+        // ... otros ...
+        /*]]>*/
+    </script>
+    <script layout:fragment="page-scripts" th:src="@{/js/appointment-step2.js}"></script>
+</section>
+</body>
+</html>

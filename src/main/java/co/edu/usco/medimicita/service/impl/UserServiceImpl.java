@@ -1,11 +1,15 @@
 package co.edu.usco.medimicita.service.impl;
 
+import co.edu.usco.medimicita.entity.UserAddressEntity; // Importar
+import co.edu.usco.medimicita.repository.UserAddressRepository; // Importar
+import co.edu.usco.medimicita.dto.PatientProfileUpdateDto;
 import co.edu.usco.medimicita.dto.UserRegistrationDto;
 import co.edu.usco.medimicita.entity.*;
 import co.edu.usco.medimicita.exception.*; // Asume que aquí están tus excepciones personalizadas
 import co.edu.usco.medimicita.repository.*;
 import co.edu.usco.medimicita.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,29 +25,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final EpsRepository epsRepository;
     private final PasswordEncoder passwordEncoder;
     private final DoctorProfileRepository doctorProfileRepository;
     private final SpecialtyRepository specialtyRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           EpsRepository epsRepository,
-                           PasswordEncoder passwordEncoder,
-                           DoctorProfileRepository doctorProfileRepository,
-                           SpecialtyRepository specialtyRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.epsRepository = epsRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.doctorProfileRepository = doctorProfileRepository;
-        this.specialtyRepository = specialtyRepository;
-    }
+    private final UserAddressRepository userAddressRepository;
 
     @Override
     @Transactional
@@ -222,7 +212,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(existingUser);
     }
 
-
     @Override
     @Transactional
     public void deleteUser(Long userId) {
@@ -253,6 +242,56 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserEntity> findById(Long id) {
         return userRepository.findById(id);
+    }
+
+
+    
+    @Override
+    @Transactional
+    public UserEntity updatePatientProfile(Long userId, PatientProfileUpdateDto updateDto) {
+        UserEntity currentUser = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + userId));
+
+        // Validar que el email nuevo (si cambia) no esté ya en uso por OTRO usuario
+        if (!currentUser.getUserEmail().equalsIgnoreCase(updateDto.getUserEmail()) &&
+                userRepository.existsByUserEmail(updateDto.getUserEmail())) {
+            throw new EmailAlreadyExistsException("El nuevo email ya está registrado por otro usuario.");
+        }
+
+        currentUser.setUserPhoneNumber(updateDto.getUserPhoneNumber());
+        currentUser.setUserEmail(updateDto.getUserEmail().toLowerCase()); // Guardar en minúsculas
+
+        UserAddressEntity addressToUpdate;
+        if (updateDto.getCurrentAddressId() != null && updateDto.getCurrentAddressId() > 0) { // Asegurarse que el ID es válido
+            addressToUpdate = userAddressRepository.findById(updateDto.getCurrentAddressId())
+                    .filter(addr -> addr.getUser().getUserId().equals(userId))
+                    .orElseThrow(() -> new ResourceNotFoundException("Dirección no encontrada o no pertenece al usuario. ID: " + updateDto.getCurrentAddressId()));
+        } else {
+            userAddressRepository.findByUser(currentUser).forEach(addr -> {
+                if (addr.getUserAddressIsCurrent() != null && addr.getUserAddressIsCurrent()) {
+                    addr.setUserAddressIsCurrent(false);
+                    userAddressRepository.save(addr);
+                }
+            });
+            addressToUpdate = new UserAddressEntity();
+            addressToUpdate.setUser(currentUser);
+        }
+
+        // Mapear los nuevos campos de dirección
+        addressToUpdate.setUserAddressStreetType(updateDto.getUserAddressStreetType());
+        addressToUpdate.setUserAddressMainWayNumber(updateDto.getUserAddressMainWayNumber());
+        addressToUpdate.setUserAddressSecondaryWayNumber(updateDto.getUserAddressSecondaryWayNumber());
+        addressToUpdate.setUserAddressHouseOrBuildingNumber(updateDto.getUserAddressHouseOrBuildingNumber());
+        addressToUpdate.setUserAddressComplement(updateDto.getUserAddressComplement());
+        addressToUpdate.setUserAddressNeighborhood(updateDto.getUserAddressNeighborhood());
+        addressToUpdate.setUserAddressMunicipality(updateDto.getUserAddressMunicipality());
+        addressToUpdate.setUserAddressDepartment(updateDto.getUserAddressDepartment());
+        addressToUpdate.setUserAddressZone(updateDto.getUserAddressZone());
+
+        addressToUpdate.setUserAddressIsCurrent(true);
+
+        userAddressRepository.save(addressToUpdate);
+        return userRepository.save(currentUser);
     }
 
     @Override

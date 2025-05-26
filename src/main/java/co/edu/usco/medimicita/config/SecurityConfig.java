@@ -1,11 +1,10 @@
 package co.edu.usco.medimicita.config;
 
-import co.edu.usco.medimicita.util.DataInitializer;
 import co.edu.usco.medimicita.service.UserService; // Tu UserDetailsService
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,10 +15,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity // (1) Habilita la configuración de seguridad web de Spring Security
+@RequiredArgsConstructor
 public class SecurityConfig {
-
-    @Autowired
-    private UserService userService; // (2) Inyecta tu UserDetailsService personalizado
+    private final UserService userService; // (2) Inyecta tu UserDetailsService personalizado
 
     // (3) Bean para el PasswordEncoder que usaremos en toda la aplicación
     @Bean

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title th:text="${pageTitle ?: 'Seleccionar Especialidad'}">Seleccionar Especialidad</title>
+    <!-- Estilos específicos para este paso, inspirados en tu codeAgendarCitasPaso1.html -->
+    <link th:href="@{/css/appointment-step1.css}" rel="stylesheet">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
+        <h1 class="page-title">Agendar Nueva Cita</h1>
+        <p class="page-subtitle">Paso 1: Selecciona la Especialidad</p>
+
+        <!-- Barra de progreso -->
+        <div class="steps-container" th:replace="~{fragments/appointment-progress :: progress-bar(currentStep=${progressStep})}"></div>
+<!--        <div class="steps-container">-->
+<!--            <div class="step" th:classappend="${progressStep == 1 ? 'active' : (progressStep > 1 ? 'completed' : 'inactive')}">-->
+<!--                <div class="step-number">1</div>-->
+<!--                <div class="step-label">Especialidad</div>-->
+<!--            </div>-->
+<!--            <div class="step" th:classappend="${progressStep == 2 ? 'active' : (progressStep > 2 ? 'completed' : 'inactive')}">-->
+<!--                <div class="step-number">2</div>-->
+<!--                <div class="step-label">Médico, Fecha y Hora</div>-->
+<!--            </div>-->
+<!--            <div class="step" th:classappend="${progressStep == 3 ? 'active' : 'inactive'}">-->
+<!--                <div class="step-number">3</div>-->
+<!--                <div class="step-label">Confirmación</div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <p th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></p>
+
+        <form id="selectSpecialtyForm" th:action="@{/patient/appointments/new/select-specialty}" method="post">
+            <input type="hidden" name="specialtyId" id="selectedSpecialtyIdInput" required/>
+            <!-- CSRF Token -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <div class="specialties-intro">
+                <p>Selecciona la especialidad médica para la cual deseas agendar tu cita:</p>
+            </div>
+
+            <div class="specialties-grid" th:if="${!#lists.isEmpty(specialties)}">
+                <div th:each="spec : ${specialties}" class="specialty-card"
+                     th:attr="data-specialty-id=${spec.specialtyId}, data-specialty-name=${spec.specialtyName}"
+                     onclick="selectSpecialty(this)">
+                    <div class="specialty-icon">
+                        <!-- Iconos de ejemplo, necesitarías una lógica para mapear iconos a especialidades -->
+                        <i class="material-icons" th:if="${#strings.containsIgnoreCase(spec.specialtyName, 'General')}">medical_services</i>
+                        <i class="material-symbols-outlined" th:if="${#strings.containsIgnoreCase(spec.specialtyName, 'Odonto')}">dentistry</i>
+                        <i class="material-symbols-outlined" th:if="${#strings.containsIgnoreCase(spec.specialtyName, 'Gineco')}">gynecology</i>
+                        <i class="material-icons" th:if="${!#strings.containsIgnoreCase(spec.specialtyName, 'General') && !#strings.containsIgnoreCase(spec.specialtyName, 'Odonto') && !#strings.containsIgnoreCase(spec.specialtyName, 'Gineco')}">health_and_safety</i>
+                    </div>
+                    <h3 class="specialty-name" th:text="${spec.specialtyName}">Nombre Especialidad</h3>
+                    <p class="specialty-description" th:text="'Duración aprox: ' + ${spec.specialtyDefaultDurationMinutes} + ' min.'">Descripción de la especialidad.</p>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(specialties)}" class="alert alert-warning">
+                No hay especialidades activas disponibles en este momento.
+            </div>
+
+            <div class="continue-button-container d-flex justify-content-center gap-2">
+                <a th:href="@{/patient/dashboard}" class="btn btn-secondary">
+                    <i class="material-icons">cancel</i> <!-- O arrow_back -->
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary" id="continueButton" style="display:none;">
+                    <i class="material-icons">arrow_forward</i>
+                    Continuar
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script layout:fragment="page-scripts">
+        let selectedSpecialtyId = null;
+        const continueBtn = document.getElementById('continueButton');
+        const hiddenInput = document.getElementById('selectedSpecialtyIdInput');
+        const specialtyCards = document.querySelectorAll('.specialty-card');
+
+        function selectSpecialty(cardElement) {
+            specialtyCards.forEach(c => c.classList.remove('selected-card'));
+            cardElement.classList.add('selected-card');
+            selectedSpecialtyId = cardElement.getAttribute('data-specialty-id');
+            hiddenInput.value = selectedSpecialtyId;
+            continueBtn.style.display = 'inline-flex';
+        }
+    </script>
+</section>
+</body>
+</html>

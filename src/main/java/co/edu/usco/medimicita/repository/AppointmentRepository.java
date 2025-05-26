@@ -14,44 +14,55 @@ import java.util.List;
 @Repository
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, Long> {
 
+    // ... (otros métodos que ya tenías: findByPatientUserOrderBy..., findByDoctorUserOrderBy..., etc.) ...
     List<AppointmentEntity> findByPatientUserOrderByAppointmentStartDatetimeDesc(UserEntity patientUser);
     List<AppointmentEntity> findByDoctorUserOrderByAppointmentStartDatetimeAsc(UserEntity doctorUser);
 
-    // Citas futuras de un paciente
     List<AppointmentEntity> findByPatientUserAndAppointmentStartDatetimeAfterOrderByAppointmentStartDatetimeAsc(
             UserEntity patientUser, OffsetDateTime currentTime);
 
-    // Citas pasadas de un paciente
     List<AppointmentEntity> findByPatientUserAndAppointmentStartDatetimeBeforeOrderByAppointmentStartDatetimeDesc(
             UserEntity patientUser, OffsetDateTime currentTime);
 
-    // Citas de un médico en un rango de fechas
+    // Este método es útil para cargar las citas de un día para generateSlotsForDoctorOnDate
     List<AppointmentEntity> findByDoctorUserAndAppointmentStartDatetimeBetweenOrderByAppointmentStartDatetimeAsc(
             UserEntity doctorUser, OffsetDateTime startRange, OffsetDateTime endRange);
 
-    // Verificar si un médico tiene una cita en un slot específico (excluyendo una cita existente si se está actualizando)
-    @Query("SELECT COUNT(a) FROM AppointmentEntity a WHERE a.doctorUser = :doctorUser " +
-            "AND a.appointmentStatus = 'SCHEDULED' " +
-            "AND a.appointmentId <> :excludeAppointmentId " + // Para excluir la cita actual al reprogramar
-            "AND a.appointmentStartDatetime < :endDateTime " +
-            "AND a.appointmentEndDatetime > :startDateTime")
-    long countScheduledAppointmentsForDoctorInSlot(
-            @Param("doctorUser") UserEntity doctorUser,
-            @Param("startDateTime") OffsetDateTime startDateTime,
-            @Param("endDateTime") OffsetDateTime endDateTime,
-            @Param("excludeAppointmentId") Long excludeAppointmentId); // Pasar -1L o null si es una nueva cita
 
-    // Por defecto para nueva cita (sin excluir ninguna)
-    default long countScheduledAppointmentsForDoctorInSlot(UserEntity doctorUser, OffsetDateTime startDateTime, OffsetDateTime endDateTime) {
-        return countScheduledAppointmentsForDoctorInSlot(doctorUser, startDateTime, endDateTime, -1L);
+    /**
+     * Cuenta el número de citas AGENDADAS ('SCHEDULED') para un médico específico
+     * que se solapan con el slot de tiempo propuesto [slotStartDateTime, slotEndDateTime).
+     * No cuenta la cita que se está intentando reprogramar (si se proporciona excludeAppointmentId).
+     *
+     * @param doctor             El médico.
+     * @param slotStartDateTime  Inicio del slot propuesto.
+     * @param slotEndDateTime    Fin del slot propuesto.
+     * @param excludeAppointmentId ID de la cita a excluir de la cuenta (útil al reprogramar).
+     *                           Pasar un valor no existente (ej. -1L o null si el tipo fuera Long objeto) si es una nueva cita.
+     * @return El número de citas agendadas que se solapan.
+     */
+    @Query("SELECT COUNT(a) FROM AppointmentEntity a " +
+            "WHERE a.doctorUser = :doctor " +
+            "AND a.appointmentStatus = co.edu.usco.medimicita.enums.AppointmentStatusEnum.SCHEDULED " + // Referencia completa al Enum
+            "AND (:excludeAppointmentId IS NULL OR a.appointmentId <> :excludeAppointmentId) " +
+            "AND a.appointmentStartDatetime < :slotEndDateTime " +
+            "AND a.appointmentEndDatetime > :slotStartDateTime")
+    long countScheduledAppointmentsForDoctorInSlotExcludingId(
+            @Param("doctor") UserEntity doctor,
+            @Param("slotStartDateTime") OffsetDateTime slotStartDateTime,
+            @Param("slotEndDateTime") OffsetDateTime slotEndDateTime,
+            @Param("excludeAppointmentId") Long excludeAppointmentId);
+
+    // Método de conveniencia para nuevas citas (sin excluir ninguna)
+    default long countScheduledAppointmentsForDoctorInSlot(UserEntity doctor, OffsetDateTime slotStartDateTime, OffsetDateTime slotEndDateTime) {
+        return countScheduledAppointmentsForDoctorInSlotExcludingId(doctor, slotStartDateTime, slotEndDateTime, null); // Pasar null para que la condición :excludeAppointmentId IS NULL sea true
     }
 
 
-    // Contar citas futuras activas de un paciente para una especialidad
     @Query("SELECT COUNT(a) FROM AppointmentEntity a " +
             "WHERE a.patientUser = :patientUser " +
             "AND a.specialty.specialtyId = :specialtyId " +
-            "AND a.appointmentStatus = 'SCHEDULED' " +
+            "AND a.appointmentStatus = co.edu.usco.medimicita.enums.AppointmentStatusEnum.SCHEDULED " +
             "AND a.appointmentStartDatetime > :currentTime")
     long countActiveFutureAppointmentsByPatientAndSpecialty(
             @Param("patientUser") UserEntity patientUser,
@@ -59,12 +70,10 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
             @Param("currentTime") OffsetDateTime currentTime);
 
 
-    // Verificar si un paciente tiene una cita en la misma fecha y hora exacta
     @Query("SELECT COUNT(a) FROM AppointmentEntity a WHERE a.patientUser = :patientUser " +
-            "AND a.appointmentStatus = 'SCHEDULED' " +
+            "AND a.appointmentStatus = co.edu.usco.medimicita.enums.AppointmentStatusEnum.SCHEDULED " +
             "AND a.appointmentStartDatetime = :exactStartDateTime")
     long countScheduledAppointmentsForPatientAtExactTime(
             @Param("patientUser") UserEntity patientUser,
             @Param("exactStartDateTime") OffsetDateTime exactStartDateTime);
-
 }

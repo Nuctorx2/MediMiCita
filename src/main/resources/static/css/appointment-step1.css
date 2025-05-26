@@ -1,0 +1,63 @@
+/* Puedes mover esto a un CSS dedicado si crece mucho */
+.steps-container { /* Tomado de tu CSS */
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+}
+.steps-container::before {
+    content: ""; position: absolute; top: 10px; left: 0; right: 0; height: 2px;
+    background-color: #e8f1fa; /* var(--secondary) */
+    z-index: 1;
+}
+.step {
+    position: relative; z-index: 2; display: flex; flex-direction: column;
+    align-items: center; width: 33%; /* Ajustado para 3 pasos */
+}
+.step-number {
+    width: 24px; height: 24px; border-radius: 50%;
+    background-color: #246BB2; /* var(--primary) */
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;
+}
+.step.active .step-number { background-color: #34A853; /* var(--accent) */ }
+.step.inactive .step-number { background-color: #e8f1fa; color: #2E3A46; border: 1px solid #ccc; }
+.step.completed .step-number { background-color: #246BB2; /* O un color diferente para completado */ }
+
+.step-label { font-size: 0.85rem; font-weight: 500; text-align: center; color: #2E3A46; }
+.step.active .step-label { color: #34A853; font-weight: 600; }
+.step.inactive .step-label { opacity: 0.6; }
+.step.completed .step-label { font-weight: 500; } /* O normal */
+
+.specialties-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Cambiado a 3 columnas fijas */
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    max-width: 1200px; /* Añadido para controlar el ancho máximo */
+    margin-left: auto; /* Centrado horizontal */
+    margin-right: auto; /* Centrado horizontal */
+    position: relative;
+}
+.specialty-card {
+    background-color: #f8f9fa; /* Light gray */
+    border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column;
+    align-items: center; text-align: center; transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid transparent;
+}
+.specialty-card:hover, .specialty-card.selected-card {
+    transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-color: #246BB2; /* var(--primary) */
+}
+.specialty-icon { /* Similar a tu CSS */
+    width: 60px; height: 60px; background-color: #246BB2; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; color: white;
+}
+.specialty-icon .material-icons, .specialty-icon .material-symbols-outlined { font-size: 2rem; }
+.specialty-name { font-weight: 600; color: #2E3A46; margin-bottom: 0.5rem; font-size: 1.1rem; }
+.specialty-description { font-size: 0.9rem; color: #2E3A46; opacity: 0.8; }
+
+.page-title { font-size: 1.8rem; margin-bottom: 0.5rem;}
+.page-subtitle { font-size: 1rem; color: #6c757d; margin-bottom: 1.5rem; }
+
+.continue-button-container { text-align: center; margin-top: 2rem; }

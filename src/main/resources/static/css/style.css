@@ -1,0 +1,119 @@
+:root {
+    --color-primary: #003366;        /* Azul oscuro */
+    --color-secondary: #F9F871;     /* Amarillo claro */
+    --color-accent: #6699CC;         /* Azul claro */
+    --color-text: #000000;           /* Texto Negro */
+    --color-background-light: #FFFFFF; /* Fondo Blanco */
+    --color-shadow: rgba(0, 0, 0, 0.1);
+    --color-border: rgba(0, 0, 0, 0.12);
+
+    /* Para Bootstrap, si quieres sobrescribir sus colores primarios, etc. */
+    --bs-primary: var(--color-primary);
+    --bs-secondary: var(--color-secondary);
+    /* Bootstrap usa 'secondary' para un gris. Quizás no quieras sobreescribirlo con amarillo.
+       Puedes usar tus propias clases o sobreescribir componentes específicos. */
+    --bs-body-color: var(--color-text);
+    --bs-body-bg: var(--color-background-light);
+}
+
+body {
+    background-color: var(--color-background-light);
+    color: var(--color-text);
+    /* ... otros estilos de body ... */
+}
+
+/* Actualiza tus clases existentes para usar estas variables */
+.sidebar {
+    background-color: var(--color-primary);
+    color: var(--color-background-light); /* Texto blanco sobre azul oscuro */
+}
+.sidebar-logo {
+    color: var(--color-background-light);
+}
+.nav-item {
+    color: var(--color-background-light); /* O un color ligeramente menos brillante */
+}
+.nav-item:hover, .nav-item.active {
+    background-color: rgba(255, 255, 255, 0.1); /* Ajusta la opacidad o color */
+}
+.nav-item.active { /* Para un contraste más claro con el nuevo primario */
+    background-color: var(--color-accent);
+    color: var(--color-background-light);
+}
+
+
+.header .greeting {
+    /* color: var(--color-text); Por defecto ya es negro */
+}
+.avatar {
+    background-color: var(--color-primary);
+    color: var(--color-background-light);
+}
+.user-profile .material-icons { /* Para el icono de notificaciones */
+    color: var(--color-primary); /* O var(--color-text) */
+}
+
+
+.page-title { /* Ya usa el color de texto por defecto */ }
+.page-subtitle { color: #6c757d; /* Mantener un gris o ajustar */ }
+
+/* Botones */
+.btn-primary {
+    background-color: var(--color-accent); /* Usar el azul claro para acciones primarias */
+    color: var(--color-background-light);
+    border-color: var(--color-accent); /* Si tiene borde */
+}
+.btn-primary:hover {
+    background-color: #5588BB; /* Un tono más oscuro de azul claro */
+    border-color: #5588BB;
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary); /* Amarillo claro */
+    color: var(--color-primary); /* Texto azul oscuro para contraste con amarillo */
+    border-color: #E0DF60; /* Un borde ligeramente más oscuro para el amarillo */
+}
+.btn-secondary:hover {
+    background-color: #E0DF60;
+}
+
+
+/* Tarjetas de especialidad */
+.specialty-card {
+    background-color: var(--color-background-light); /* Fondo blanco */
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 4px var(--color-shadow);
+}
+.specialty-card:hover, .specialty-card.selected-card {
+    border-color: var(--color-primary); /* Borde azul oscuro al seleccionar/hover */
+    box-shadow: 0 6px 12px var(--color-shadow);
+}
+.specialty-icon {
+    background-color: var(--color-primary);
+    color: var(--color-background-light);
+}
+.specialty-name {
+    color: var(--color-primary); /* Nombre de especialidad en azul oscuro */
+}
+.specialty-description {
+    /* color: var(--color-text); Ya es negro por defecto */
+}
+
+/* Barra de progreso */
+.steps-container::before { background-color: var(--color-secondary); }
+.step-number { background-color: var(--color-primary); color: var(--color-background-light); }
+.step.active .step-number { background-color: var(--color-accent); color: var(--color-background-light); }
+.step.inactive .step-number { background-color: #e9ecef; color: var(--color-text); border: 1px solid var(--color-border); }
+.step.completed .step-number { background-color: var(--color-primary); }
+.step.active .step-label { color: var(--color-accent); }
+
+/* Navbar (main-layout.html) */
+.navbar.bg-primary { /* Sobreescribir la clase de Bootstrap si la usas */
+    background-color: var(--color-primary) !important; /* Usar !important si es necesario para sobreescribir Bootstrap */
+}
+.navbar-brand { color: var(--color-secondary) !important; } /* Marca en amarillo claro */
+.navbar .nav-link { color: rgba(255, 255, 255, 0.75) !important; } /* Texto de enlaces más sutil */
+.navbar .nav-link:hover, .navbar .nav-link.active { color: var(--color-background-light) !important; }
+.navbar .navbar-text { color: rgba(255, 255, 255, 0.9) !important; }
+.navbar .btn-outline-light { border-color: var(--color-secondary); color: var(--color-secondary); }
+.navbar .btn-outline-light:hover { background-color: var(--color-secondary); color: var(--color-primary); }

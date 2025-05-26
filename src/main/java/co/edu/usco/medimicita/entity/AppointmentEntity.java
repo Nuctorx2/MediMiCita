@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+/*
 // (1) Constraints a considerar a nivel de BD (además de las FKs):
 // - CHECK(appointment_end_datetime > appointment_start_datetime)
 // - Constraints de Exclusión (GiST en PostgreSQL) para prevenir solapamientos:
@@ -19,6 +20,7 @@ import java.util.List;
 //   - Un paciente no puede tener dos citas 'SCHEDULED' solapadas.
 //     (patient_user_id, [appointment_start_datetime, appointment_end_datetime]) WHERE status = 'SCHEDULED'
 //   Estas son complejas de definir solo con JPA y usualmente se hacen en BD o se validan rigurosamente en el servicio.
+*/
 @Entity
 @Table(name = "appointments", indexes = {
         @Index(name = "idx_appointment_patient_user_id", columnList = "patient_user_id"),
