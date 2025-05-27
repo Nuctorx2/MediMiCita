@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title th:text="${pageTitle ?: 'Confirmar Cita'}">Confirmar Cita</title>
+    <link th:href="@{/css/appointment-step3.css}" rel="stylesheet">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
+        <h1 class="page-title">Agendar Nueva Cita</h1>
+        <p class="page-subtitle">Paso 3: Confirma los Detalles de tu Cita</p>
+
+        <div class="steps-container" th:replace="~{fragments/appointment-progress :: progress-bar(currentStep=${progressStep})}"></div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div class="confirmation-summary-card">
+            <h3><i class="material-icons">check_circle_outline</i> Resumen de tu Cita</h3>
+            <hr>
+            <div class="summary-details mt-3">
+                <p class="summary-item"><strong>Especialidad:</strong> <span th:text="${specialtyName}"></span></p>
+                <p class="summary-item"><strong>Médico:</strong> <span th:text="${doctorName}"></span></p>
+                <p class="summary-item"><strong>Fecha:</strong> <span th:text="${displayDate}"></span></p>
+                <p class="summary-item"><strong>Hora:</strong> <span th:text="${displayTime}"></span></p>
+                <p class="summary-item"><strong>Consultorio:</strong> <span th:text="${officeNumber ?: 'Por confirmar'}"></span></p>
+                <p class="summary-item"><strong>Duración Aprox.:</strong> <span th:text="${durationMinutes} + ' minutos'"></span></p>
+            </div>
+            <hr>
+            <p class="text-muted small mt-3">Por favor, revisa cuidadosamente los detalles. Una vez confirmada, la cita quedará agendada.</p>
+
+            <form th:action="@{/patient/appointments/new/confirm}" method="post" class="mt-3">
+                <input type="hidden" name="specialtyId" th:value="${specialtyId}" />
+                <input type="hidden" name="doctorId" th:value="${doctorId}" />
+                <input type="hidden" name="selectedDate" th:value="${selectedDate}" /> <!-- YYYY-MM-DD -->
+                <input type="hidden" name="selectedTime" th:value="${selectedTime}" /> <!-- HH:MM o HH:MM:SS -->
+                <input type="hidden" name="durationMinutes" th:value="${durationMinutes}" />
+                <!-- CSRF Token -->
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div class="buttons-container mt-3 d-flex justify-content-between">
+                    <a th:href="@{/patient/appointments/new/select-slot(specialtyId=${specialtyId}, specialtyName=${specialtyName}, specialtyDuration=${durationMinutes})}"
+                       class="btn btn-secondary">
+                        <i class="material-icons">arrow_back</i> Modificar Selección
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="material-icons">event_available</i> Confirmar Cita
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

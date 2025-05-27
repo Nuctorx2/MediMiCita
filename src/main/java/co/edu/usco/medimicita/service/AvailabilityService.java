@@ -3,6 +3,8 @@ package co.edu.usco.medimicita.service;
 import co.edu.usco.medimicita.dto.AvailableSlotDto;
 // No necesitamos UserEntity aquí directamente, usaremos IDs.
 
+
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime; // Para isSlotAvailable que trabaja con fecha y hora completas
 import java.time.YearMonth;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AvailabilityService {
+
 
     /**
      * Obtiene una lista de fechas dentro de un mes específico que tienen al menos un slot

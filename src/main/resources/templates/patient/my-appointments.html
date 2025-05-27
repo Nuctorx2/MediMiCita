@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title th:text="${pageTitle ?: 'Mis Citas'}">Mis Citas</title>
+    <style>
+        .appointment-card { margin-bottom: 1.5rem; }
+        .card-header { font-weight: bold; }
+        .status-SCHEDULED { color: #0d6efd; /* Azul */ }
+        .status-COMPLETED { color: #198754; /* Verde */ }
+        .status-CANCELLED_PATIENT, .status-CANCELLED_ADMIN, .status-CANCELLED_SYSTEM { color: #dc3545; /* Rojo */ }
+        .status-NO_SHOW { color: #6c757d; /* Gris */ }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
+        <h1 th:text="${pageTitle}">Mis Citas</h1>
+
+        <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+        <div class="mb-4">
+            <a th:href="@{/patient/appointments/new/select-specialty}" class="btn btn-primary">
+                <i class="material-icons">add_circle_outline</i> Agendar Nueva Cita
+            </a>
+        </div>
+
+        <h2>Próximas Citas</h2>
+        <div th:if="${#lists.isEmpty(futureAppointments)}" class="alert alert-info">
+            No tienes próximas citas agendadas.
+        </div>
+        <div class="row">
+            <div th:each="app : ${futureAppointments}" class="col-md-6">
+                <div class="card appointment-card">
+                    <div class="card-header" th:text="${app.specialty.specialtyName}">Especialidad</div>
+                    <div class="card-body">
+                        <p><strong>Fecha y Hora:</strong>
+                            <span th:text="${#temporals.format(app.appointmentStartDatetime, 'EEEE, d MMM yyyy, hh:mm a')}"></span>
+                        </p>
+                        <p><strong>Médico:</strong> <span th:text="${app.doctorUser.userFirstName + ' ' + app.doctorUser.userLastName}"></span></p>
+                        <p><strong>Estado:</strong> <span th:text="${app.appointmentStatus.name()}" th:classappend="'status-' + ${app.appointmentStatus.name()}"></span></p>
+                        <p><strong>Consultorio:</strong> <span th:text="${app.doctorUser.doctorProfile?.doctorProfileOfficeNumber ?: 'N/A'}"></span></p>
+                        <!-- Botón de Cancelar Cita (si el estado es SCHEDULED y cumple la regla de 24h) -->
+                        <form th:if="${app.appointmentStatus.name() == 'SCHEDULED'}"
+                              th:action="@{/patient/appointments/cancel/{id}(id=${app.appointmentId})}"
+                              method="post" class="mt-2"
+                              onsubmit="return confirm('¿Estás seguro de que deseas cancelar esta cita?');">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-sm btn-danger">Cancelar Cita</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <h2>Citas Pasadas</h2>
+        <div th:if="${#lists.isEmpty(pastAppointments)}" class="alert alert-info">
+            No tienes citas pasadas en tu historial.
+        </div>
+        <div class="row">
+            <div th:each="app : ${pastAppointments}" class="col-md-6">
+                <div class="card appointment-card">
+                    <div class="card-header" th:text="${app.specialty.specialtyName}">Especialidad</div>
+                    <div class="card-body">
+                        <p><strong>Fecha y Hora:</strong>
+                            <span th:text="${#temporals.format(app.appointmentStartDatetime, 'EEEE, d MMM yyyy, hh:mm a')}"></span>
+                        </p>
+                        <p><strong>Médico:</strong> <span th:text="${app.doctorUser.userFirstName + ' ' + app.doctorUser.userLastName}"></span></p>
+                        <p><strong>Estado:</strong> <span th:text="${app.appointmentStatus.name()}" th:classappend="'status-' + ${app.appointmentStatus.name()}"></span></p>
+                        <p><strong>Consultorio:</strong> <span th:text="${app.doctorUser.doctorProfile?.doctorProfileOfficeNumber ?: 'N/A'}"></span></p> <!-- Añadido el consultorio que estaba en tu ejemplo anterior -->
+
+                        <!-- Botón de Cancelar Cita -->
+                        <th:block th:if="${app.appointmentStatus.name() == 'SCHEDULED'}">
+                            <!-- Lógica para verificar si se puede cancelar (ej. > 24 horas) -->
+                            <th:block th:with="now=${T(java.time.OffsetDateTime).now(T(co.edu.usco.medimicita.util.ClinicConstants).CLINIC_ZONE_ID)},
+                           twentyFourHoursFromNow=${now.plusHours(24)}">
+                                <!-- Mostrar botón de cancelar si la cita es después de 24 horas desde ahora -->
+                                <form th:if="${app.appointmentStartDatetime.isAfter(twentyFourHoursFromNow)}"
+                                      th:action="@{/patient/appointments/cancel/{id}(id=${app.appointmentId})}"
+                                      method="post" class="mt-2 d-inline"
+                                      onsubmit="return confirm('¿Estás seguro de que deseas cancelar esta cita?');">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Cancelar Cita</button>
+                                </form>
+                                <!-- Mostrar mensaje si la cancelación no está disponible (menos de 24h) -->
+                                <span th:if="${!app.appointmentStartDatetime.isAfter(twentyFourHoursFromNow)}" class="text-muted small mt-2 d-block">Cancelación no disponible (menos de 24h).</span>
+                            </th:block>
+                        </th:block>
+                    </div> <!-- CIERRE CORRECTO DEL div.card-body -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+</body>
+</html>

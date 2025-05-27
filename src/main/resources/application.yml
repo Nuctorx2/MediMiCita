@@ -5,15 +5,10 @@ server:
 
 
   ssl:
-    # Cambia a true cuando tengas el keystore listo
     enabled: true
-    # O JKS, seg�n c�mo generes tu keystore
     key-store-type: PKCS12
-    # Ruta a tu keystore dentro de src/main/resources
     key-store: classpath:certificadoSSL.p12
-    # Reemplaza con tu contrase�a
     key-store-password: Usco0101
-    # Reemplaza con el alias de tu certificado
     key-alias: MySSLForMediMiCita
 
 spring:
@@ -30,12 +25,7 @@ spring:
   # ----- JPA/HIBERNATE CONFIGURATION -----
   jpa:
     hibernate:
-      # Para desarrollo. Cambiar a 'validate' o 'none' en producci�n.
-      # 'update': actualiza el esquema si es necesario.
-      # 'validate': valida que el esquema coincida con las entidades.
-      # 'none': no hace nada con el esquema (debes gestionarlo manualmente).
-#       'create-drop': crea un esquema y lo elimina cuando se detenga el programa.
-      ddl-auto: create-drop
+      ddl-auto: update
 
     # Muestra las SQL generadas por Hibernate en la consola (�til para debug)
     show-sql: true

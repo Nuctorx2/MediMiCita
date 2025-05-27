@@ -1,10 +1,80 @@
-.scheduler-layout { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; margin-bottom: 2rem; }
-.controls-panel, .time-slots-card-container { background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.calendar-day.available { background-color: #d1e7dd; cursor: pointer; }
-.calendar-day.selected { background-color: #0d6efd; color: white; }
-.time-slot { padding: 0.75rem; border: 1px solid #ccc; margin-bottom: 0.5rem; border-radius: 4px; cursor: pointer; }
-.time-slot:hover { background-color: #e9ecef; }
-.time-slot.selected { background-color: #0d6efd; color: white; }
-.time-slot-doctor-badge { font-size: 0.8em; background-color: #6c757d; color: white; padding: 0.2em 0.4em; border-radius: 3px; margin-left: 5px; }
-.loader { border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
+.steps-container { /* Tomado de tu CSS */
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+}
+.steps-container::before {
+    content: ""; position: absolute; top: 10px; left: 0; right: 0; height: 2px;
+    background-color: #e8f1fa; /* var(--secondary) */
+    z-index: 1;
+}
+.step {
+    position: relative; z-index: 2; display: flex; flex-direction: column;
+    align-items: center; width: 33%; /* Ajustado para 3 pasos */
+}
+.step-number {
+    width: 24px; height: 24px; border-radius: 50%;
+    background-color: #246BB2; /* var(--primary) */
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;
+}
+.step.active .step-number { background-color: #34A853; /* var(--accent) */ }
+.step.inactive .step-number { background-color: #e8f1fa; color: #2E3A46; border: 1px solid #ccc; }
+.step.completed .step-number { background-color: #246BB2; /* O un color diferente para completado */ }
+
+.step-label { font-size: 0.85rem; font-weight: 500; text-align: center; color: #2E3A46; }
+.step.active .step-label { color: #34A853; font-weight: 600; }
+.step.inactive .step-label { opacity: 0.6; }
+.step.completed .step-label { font-weight: 500; } /* O normal */
+
+.scheduler-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem; margin-bottom: 2rem;
+}
+.controls-panel, .time-slots-card-container {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.calendar-day.available {
+    background-color: #d1e7dd;
+    cursor: pointer;
+}
+.calendar-day.selected {
+    background-color: #0d6efd;
+    color: white;
+}
+.time-slot { padding: 0.75rem;
+    border: 1px solid #ccc;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.time-slot:hover {
+    background-color: #e9ecef;
+}
+.time-slot.selected {
+    background-color: #0d6efd;
+    color: white;
+}
+.time-slot-doctor-badge {
+    font-size: 0.8em;
+    background-color: #6c757d;
+    color: white;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    margin-left: 5px;
+}
+.loader { border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+    display: none;
+}
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }

@@ -4,16 +4,14 @@
       layout:decorate="~{layouts/main-layout}">
 <head>
     <title th:text="${pageTitle ?: 'Seleccionar Horario'}">Seleccionar Horario</title>
-    <!-- CSS específico para esta página, inspirado en tu codeAgendarCitaPaso2.html -->
-    <!-- Puedes tomar los estilos de .scheduler-layout, .controls-panel, etc. de tu HTML
-         y ponerlos aquí o en un archivo CSS enlazado. -->
+
     <link th:href="@{/css/appointment-step2.css}" rel="stylesheet">
 </head>
 <body>
 <section layout:fragment="content">
     <div class="container mt-4">
         <h1 class="page-title">Agendar Nueva Cita</h1>
-        <p class="page-subtitle" th:text="'Paso 2: Selecciona Médico, Fecha y Hora para ' + ${specialtyName}"></p>
+        <p class="page-subtitle" th:text="'Paso 2: Selecciona la Fecha y la Hora para Agendar una Cita de ' + ${specialtyName}"></p>
 
         <!-- Barra de progreso (similar al paso 1) -->
         <div class="steps-container" th:replace="~{fragments/appointment-progress :: progress-bar(currentStep=${progressStep})}"></div>
@@ -32,16 +30,6 @@
             <div class="scheduler-layout">
                 <!-- Panel de Controles (Selector de Médico y Calendario) -->
                 <div class="controls-panel">
-                    <!-- Selector de Médico (Opcional, lo implementaremos más tarde si es necesario) -->
-                    <!--
-                    <div class="doctor-filter-card">
-                        <h3>Selecciona un Médico</h3>
-                        <select id="doctorFilter" class="form-select" aria-label="Selecciona un médico">
-                            <option value="" selected>Todos los Médicos Disponibles</option>
-                            <option th:each="doc : ${availableDoctors}" th:value="${doc.userId}" th:text="${doc.userFirstName + ' ' + doc.userLastName}"></option>
-                        </select>
-                    </div>
-                    -->
 
                     <!-- Calendario -->
                     <div class="calendar-card-container">

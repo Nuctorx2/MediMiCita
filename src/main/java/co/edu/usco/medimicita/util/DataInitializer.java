@@ -63,13 +63,20 @@ public class DataInitializer implements CommandLineRunner {
         RoleEntity adminRole = createRoleIfNotExists("ADMINISTRADOR");
 
         // 2. Crear EPS
-        EpsEntity epsSura = createEpsIfNotExists("EPS Sura");
-        createEpsIfNotExists("EPS Sanitas"); // No necesitamos la variable si no la usamos después
+        EpsEntity epsSura = createEpsIfNotExists("EPS Sura"); // Guardar en variable si la usas después (como para el paciente de prueba)
+        createEpsIfNotExists("EPS Sanitas");
+        createEpsIfNotExists("Nueva EPS");
+        createEpsIfNotExists("Compensar EPS");
 
         // 3. Crear Especialidades
         SpecialtyEntity medGeneral = createSpecialtyIfNotExists("Medicina General", 30);
+        if (medGeneral != null && medGeneral.getSpecialtyId() != null) { log.info("ID de Medicina General creada: {}", medGeneral.getSpecialtyId()); }
+//        SpecialtyEntity odontologia = createSpecialtyIfNotExists("Odontología", 40);
         SpecialtyEntity odontologia = createSpecialtyIfNotExists("Odontología", 40);
+        if (odontologia != null && odontologia.getSpecialtyId() != null) { log.info("ID de Odontología creada: {}", odontologia.getSpecialtyId()); }
+
         SpecialtyEntity ginecologia = createSpecialtyIfNotExists("Ginecología", 45);
+        if (ginecologia != null && ginecologia.getSpecialtyId() != null) { log.info("ID de Ginecología creada: {}", ginecologia.getSpecialtyId()); }
 
         // 4. Crear Usuario Administrador
         if (!userRepository.existsByUserEmail("admin@medimicita.usco.edu.co")) {

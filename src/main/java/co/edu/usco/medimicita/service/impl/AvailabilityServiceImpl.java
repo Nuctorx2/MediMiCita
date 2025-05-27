@@ -1,5 +1,6 @@
 package co.edu.usco.medimicita.service.impl;
 
+import co.edu.usco.medimicita.util.ClinicConstants;
 import co.edu.usco.medimicita.dto.AvailableSlotDto;
 import co.edu.usco.medimicita.entity.*;
 import co.edu.usco.medimicita.enums.AppointmentStatusEnum;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static co.edu.usco.medimicita.util.ClinicConstants.CLINIC_ZONE_ID;
+
 @RequiredArgsConstructor
 @Service
 public class AvailabilityServiceImpl implements AvailabilityService {
@@ -27,7 +30,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     private static final Logger log = LoggerFactory.getLogger(AvailabilityServiceImpl.class);
 
     // Se define la zona horaria de la clínica
-    private static final ZoneId CLINIC_ZONE_ID = ZoneId.of("America/Bogota");
+//    private static final ZoneId CLINIC_ZONE_ID = ZoneId.of("America/Bogota");
 
     private final UserRepository userRepository;
     private final SpecialtyRepository specialtyRepository;
@@ -128,6 +131,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         }
 
         // Obtener todas las excepciones y citas para este doctor en esta fecha para optimizar
+
         OffsetDateTime dayStart = OffsetDateTime.of(date, LocalTime.MIN, CLINIC_ZONE_ID.getRules().getOffset(Instant.now()));
         OffsetDateTime dayEnd = OffsetDateTime.of(date, LocalTime.MAX, CLINIC_ZONE_ID.getRules().getOffset(Instant.now()));
 
@@ -145,12 +149,14 @@ public class AvailabilityServiceImpl implements AvailabilityService {
             while (currentSlotStartTime.plusMinutes(appointmentDurationInMinutes).compareTo(templateEndTime) <= 0) {
                 LocalTime currentSlotEndTime = currentSlotStartTime.plusMinutes(appointmentDurationInMinutes);
 
+
+
                 // Convertir a OffsetDateTime usando la zona horaria de la clínica para comparaciones
-                OffsetDateTime slotStartDateTime = OffsetDateTime.of(date, currentSlotStartTime, CLINIC_ZONE_ID.getRules().getOffset(Instant.now()));
-                OffsetDateTime slotEndDateTime = OffsetDateTime.of(date, currentSlotEndTime, CLINIC_ZONE_ID.getRules().getOffset(Instant.now()));
+                OffsetDateTime slotStartDateTime = OffsetDateTime.of(date, currentSlotStartTime, ClinicConstants.getClinicZoneOffset());
+                OffsetDateTime slotEndDateTime = OffsetDateTime.of(date, currentSlotEndTime, ClinicConstants.getClinicZoneOffset());
 
                 // No generar slots en el pasado (considerando la hora actual)
-                if (slotStartDateTime.isBefore(OffsetDateTime.now(CLINIC_ZONE_ID))) {
+                if (slotStartDateTime.isBefore(OffsetDateTime.now(ClinicConstants.CLINIC_ZONE_ID))) {
                     currentSlotStartTime = currentSlotStartTime.plusMinutes(appointmentDurationInMinutes); // O un incremento menor para más precisión
                     continue;
                 }

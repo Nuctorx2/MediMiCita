@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title th:text="${pageTitle ?: 'Editar Perfil'}">Editar Perfil</title>
+    <link rel="stylesheet" th:href="@{../css/style.css}">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container mt-4">
+        <h1>Editar Mi Perfil</h1>
+
+        <form th:action="@{/patient/profile/edit}" th:object="${profileUpdateDto}" method="post" class="needs-validation" novalidate>
+            <input type="hidden" th:field="*{currentAddressId}" />
+
+            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+            </div>
+
+            <fieldset>
+                <legend>Información de Contacto</legend>
+                <!-- Campos de Celular y Email como antes -->
+                <div class="mb-3">
+                    <label for="userPhoneNumber" class="form-label">Número de Celular:</label>
+                    <input type="tel" class="form-control" id="userPhoneNumber" th:field="*{userPhoneNumber}" required
+                           th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('userPhoneNumber')}" th:errors="*{userPhoneNumber}" class="invalid-feedback"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="userEmail" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="userEmail" th:field="*{userEmail}" required
+                           th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}" class="invalid-feedback"></div>
+                </div>
+            </fieldset>
+
+            <fieldset class="mt-4">
+                <legend>Dirección Actual</legend>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="userAddressStreetType" class="form-label">Tipo de Vía: <span class="text-danger">*</span></label>
+                        <select class="form-select" id="userAddressStreetType" th:field="*{userAddressStreetType}" required th:errorclass="is-invalid">
+                            <option value="">Seleccione...</option>
+                            <option th:each="type : ${streetTypes}"
+                                    th:value="${type}"
+                                    th:text="${type.displayName}"></option>
+                        </select>
+                        <div th:if="${#fields.hasErrors('userAddressStreetType')}" th:errors="*{userAddressStreetType}" class="invalid-feedback"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="userAddressMainWayNumber" class="form-label">Número/Nombre Vía Principal: <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="userAddressMainWayNumber" th:field="*{userAddressMainWayNumber}" required th:errorclass="is-invalid">
+                        <div th:if="${#fields.hasErrors('userAddressMainWayNumber')}" th:errors="*{userAddressMainWayNumber}" class="invalid-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="userAddressSecondaryWayNumber" class="form-label">Número Vía Secundaria (Placa): <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="userAddressSecondaryWayNumber" th:field="*{userAddressSecondaryWayNumber}" required th:errorclass="is-invalid">
+                        <div th:if="${#fields.hasErrors('userAddressSecondaryWayNumber')}" th:errors="*{userAddressSecondaryWayNumber}" class="invalid-feedback"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="userAddressHouseOrBuildingNumber" class="form-label">Número Casa/Edificio (Placa): <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="userAddressHouseOrBuildingNumber" th:field="*{userAddressHouseOrBuildingNumber}" required th:errorclass="is-invalid">
+                        <div th:if="${#fields.hasErrors('userAddressHouseOrBuildingNumber')}" th:errors="*{userAddressHouseOrBuildingNumber}" class="invalid-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="userAddressComplement" class="form-label">Complemento (Interior, Apto, Piso, etc.):</label>
+                    <input type="text" class="form-control" id="userAddressComplement" th:field="*{userAddressComplement}" th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('userAddressComplement')}" th:errors="*{userAddressComplement}" class="invalid-feedback"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="userAddressNeighborhood" class="form-label">Barrio o Vereda: <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="userAddressNeighborhood" th:field="*{userAddressNeighborhood}" required th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('userAddressNeighborhood')}" th:errors="*{userAddressNeighborhood}" class="invalid-feedback"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="userAddressMunicipality" class="form-label">Municipio: <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="userAddressMunicipality" th:field="*{userAddressMunicipality}" required th:errorclass="is-invalid">
+                        <div th:if="${#fields.hasErrors('userAddressMunicipality')}" th:errors="*{userAddressMunicipality}" class="invalid-feedback"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="userAddressDepartment" class="form-label">Departamento: <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="userAddressDepartment" th:field="*{userAddressDepartment}" required th:errorclass="is-invalid">
+                        <div th:if="${#fields.hasErrors('userAddressDepartment')}" th:errors="*{userAddressDepartment}" class="invalid-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="userAddressZone" class="form-label">Zona: <span class="text-danger">*</span></label>
+                    <select class="form-select" id="userAddressZone" th:field="*{userAddressZone}" required th:errorclass="is-invalid">
+                        <option value="">Seleccione...</option>
+                        <option th:each="zone : ${zoneTypes}"
+                                th:value="${zone}"
+                                th:text="${zone.displayName}"></option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('userAddressZone')}" th:errors="*{userAddressZone}" class="invalid-feedback"></div>
+                </div>
+            </fieldset>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a th:href="@{/patient/profile}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

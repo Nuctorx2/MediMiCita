@@ -1,31 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/main-layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Bienvenido - Medimicita</title>
-    <!-- Enlace a CSS o framework de tu elección -->
-    <link rel="stylesheet" href="/templates/style/style.css">
+    <title th:text="${pageTitle ?: 'Bienvenido'}">Bienvenido a MediMiCita</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 <body>
-<header>
-    <h1>Medimicita</h1>
-    <nav>
-        <ul>
-            <li><a th:href="@{/login}">Iniciar Sesión</a></li>
-            <li><a th:href="@{/register}">Registrarse</a></li>
-        </ul>
-    </nav>
-</header>
+<section layout:fragment="content">
+    <div class="container mt-4">
 
-<main>
-    <section class="welcome">
-        <h2>Bienvenido a Medimicita</h2>
-        <p>Por favor, inicia sesión o regístrate para acceder a tu panel.</p>
-    </section>
-</main>
+        <div class="hero-section">
+            <h1>Bienvenido a MediMiCita</h1>
+            <p>Tu plataforma confiable para agendar citas médicas de forma fácil y rápida. Accede a tu información de salud y gestiona tus consultas desde la comodidad de tu hogar.</p>
 
-<footer>
-    <p>&copy; 2025 Medimicita. Todos los derechos reservados.</p>
-</footer>
+            <div class="cta-buttons">
+                <!-- Mostrar botones según estado de autenticación -->
+                <div sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" class="btn btn-primary">Iniciar Sesión</a>
+                    <a th:href="@{/register}" class="btn btn-outline-primary">Registrarse como Paciente</a>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+                    <!-- Usamos userRoleName del GlobalControllerAdvice -->
+                    <a th:if="${userRoleName == 'PACIENTE'}" th:href="@{/patient/dashboard}" class="btn btn-primary">Ir a Mi Dashboard</a>
+                    <a th:if="${userRoleName == 'MEDICO'}" th:href="@{/doctor/dashboard}" class="btn btn-primary">Ir a Mi Dashboard</a>
+                    <a th:if="${userRoleName == 'ADMINISTRADOR'}" th:href="@{/admin/dashboard}" class="btn btn-primary">Ir a Mi Dashboard</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <h2 class="text-center mb-4">Nuestros Servicios</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="material-icons feature-icon">event_available</i>
+                        <h3>Agendamiento Fácil</h3>
+                        <p>Encuentra y reserva citas con tus especialistas preferidos en pocos clics.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="material-icons feature-icon">person_search</i>
+                        <h3>Acceso a tu Perfil</h3>
+                        <p>Mantén tu información de contacto actualizada y accede a tu historial.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="material-icons feature-icon">folder_shared</i>
+                        <h3>Historial Centralizado</h3>
+                        <p>Consulta tu historial clínico registrado por los profesionales de la salud.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
 </body>
 </html>

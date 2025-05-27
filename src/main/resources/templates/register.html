@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout-no-sidebar}" lang="es-ES"> <!-- O tu layout preferido -->
+<head>
+    <title th:text="${pageTitle ?: 'Registro de Paciente'}">Registro de Paciente</title>
+    <style>
+        .registration-container { max-width: 600px; margin: 3rem auto; padding: 2rem; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .registration-container h1 { text-align: center; margin-bottom: 1.5rem; color: #003366; }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="registration-container">
+        <h1>Registro de Nuevo Paciente</h1>
+
+        <form th:action="@{/register}" th:object="${userRegistrationDto}" method="post" class="needs-validation" novalidate>
+            <!-- Mostrar errores globales -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+            <!-- Campos del Formulario (Adaptar a UserRegistrationDto) -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="firstName" class="form-label">Nombres</label>
+                    <input type="text" class="form-control" th:field="*{firstName}" id="firstName" required th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="lastName" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" th:field="*{lastName}" id="lastName" required th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="identificationNumber" class="form-label">Número de Identificación</label>
+                <input type="text" class="form-control" th:field="*{identificationNumber}" id="identificationNumber" required th:errorclass="is-invalid">
+                <div th:if="${#fields.hasErrors('identificationNumber')}" th:errors="*{identificationNumber}" class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="birthDate" class="form-label">Fecha de Nacimiento</label>
+                <input type="date" class="form-control" th:field="*{birthDate}" id="birthDate" required th:errorclass="is-invalid">
+                <div th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Número de Celular</label>
+                <input type="tel" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" required th:errorclass="is-invalid">
+                <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" th:field="*{email}" id="email" required th:errorclass="is-invalid">
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" th:field="*{password}" id="password" required th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" th:field="*{confirmPassword}" id="confirmPassword" required th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="mb-3" th:if="${epsList != null}"> <!-- Solo mostrar si epsList está en el modelo -->
+                <label for="epsId" class="form-label">EPS</label>
+                <select class="form-select" th:field="*{epsId}" id="epsId" th:errorclass="is-invalid">
+                    <option value="">Seleccione su EPS (Opcional)</option>
+                    <option th:each="eps : ${epsList}" th:value="${eps.epsId}" th:text="${eps.epsName}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('epsId')}" th:errors="*{epsId}" class="invalid-feedback"></div>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" th:field="*{termsAccepted}" id="termsAccepted" required th:errorclass="is-invalid">
+                <label class="form-check-label" for="termsAccepted">
+                    Acepto los <a th:href="@{/terms}" target="_blank">Términos y Condiciones</a> y la Política de Privacidad.
+                </label>
+                <div th:if="${#fields.hasErrors('termsAccepted')}" th:errors="*{termsAccepted}" class="invalid-feedback d-block"></div>
+            </div>
+
+            <!-- CSRF Token -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Registrarme</button>
+        </form>
+        <p class="mt-3 text-center">¿Ya tienes una cuenta? <a th:href="@{/login}">Inicia Sesión</a></p>
+    </div>
+</section>
+</body>
+</html>

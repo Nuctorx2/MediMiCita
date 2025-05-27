@@ -1,0 +1,38 @@
+.hero-section {
+    background-color: #e8f1fa; /* Un color suave, puedes usar tu var(--color-secondary) si lo defines en CSS global */
+    padding: 4rem 1rem;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+.hero-section h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #003366; /* var(--color-primary) */
+    margin-bottom: 1rem;
+}
+.hero-section p {
+    font-size: 1.1rem;
+    color: #2E3A46; /* var(--neutral-dark) */
+    margin-bottom: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.cta-buttons .btn {
+    margin: 0.5rem;
+    padding: 0.8rem 1.8rem;
+    font-size: 1.1rem;
+}
+.features-section {
+    padding: 2rem 0;
+}
+.feature-card {
+    text-align: center;
+    padding: 1.5rem;
+}
+.feature-icon {
+    font-size: 3rem; /* Tamaño grande para los iconos */
+    color: #003366; /* var(--color-primary) */
+    margin-bottom: 1rem;
+}

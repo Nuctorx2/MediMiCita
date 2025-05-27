@@ -1,0 +1,32 @@
+.confirmation-summary-card { background-color: #f8f9fa; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 600px; margin: 2rem auto; }
+.summary-item { display: flex; margin-bottom: 0.75rem; }
+.summary-item strong { min-width: 120px; display: inline-block; }
+.steps-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+}
+.steps-container::before {
+    content: ""; position: absolute; top: 10px; left: 0; right: 0; height: 2px;
+    background-color: #e8f1fa;
+    z-index: 1;
+}
+.step {
+    position: relative; z-index: 2; display: flex; flex-direction: column;
+    align-items: center; width: 33%;
+}
+.step-number {
+    width: 24px; height: 24px; border-radius: 50%;
+    background-color: #246BB2; /* var(--primary) */
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;
+}
+.step.active .step-number { background-color: #34A853; /* var(--accent) */ }
+.step.inactive .step-number { background-color: #e8f1fa; color: #2E3A46; border: 1px solid #ccc; }
+.step.completed .step-number { background-color: #246BB2; /* O un color diferente para completado */ }
+
+.step-label { font-size: 0.85rem; font-weight: 500; text-align: center; color: #2E3A46; }
+.step.active .step-label { color: #34A853; font-weight: 600; }
+.step.inactive .step-label { opacity: 0.6; }
+.step.completed .step-label { font-weight: 500; } /* O normal */

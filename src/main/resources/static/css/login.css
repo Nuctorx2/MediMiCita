@@ -1,0 +1,19 @@
+.login-container {
+    max-width: 450px;
+    margin: 5rem auto; /* Más margen superior */
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.login-container h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #003366; /* var(--color-primary) */
+}
+.form-floating label {
+    padding-left: 0.5rem; /* Ajuste para floating labels */
+}
+.form-check-label {
+    font-size: 0.9rem;
+}
